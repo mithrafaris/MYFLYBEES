@@ -1,0 +1,95 @@
+<%- include('../include/login-header') %>
+<link rel="stylesheet" type="text/css" href="/css/outer.css">
+<link rel="icon" type="image/png" href="/images/icons/favicon.png"/>
+
+<div class="row">
+    <div class="col-md-6 mx-auto p-0">
+        <div class="card">
+            <div class="login-box">
+                <div class="row">
+                    <div class="login-snip">
+                        <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+                        <label for="tab-1" class="tab">Login</label>
+                        <input id="tab-2" type="radio" name="tab" class="sign-up">
+                        <label for="tab-2" class="tab"></label>
+                        <div class="login-space">
+                            <div class="login">
+                                <!-- Login Form -->
+                                <form action="user_login" method="post" onsubmit="return validateLogin()">
+                                    <div class="group">
+                                        <label for="login-user" class="label">Useremail</label>
+                                        <input id="login-user" name="email" type="text" class="input" placeholder="Enter your Username">
+                                    </div>
+                                    <div class="group">
+                                        <label for="login-pass" class="label">Password</label>
+                                        <input id="login-pass" name="password"   type="password" class="input" data-type="password" placeholder="Enter your password">
+                                    </div>
+                                    <!-- <div class="group">
+                                        <input id="login-check" type="checkbox" class="check" checked>
+                                        <label for="login-check"><span class="icon"></span> Keep me Signed in</label>
+                                    </div> -->
+                                    <div class="group">
+                                        <input type="submit" class="button" value="Sign In">
+                                    </div>
+                                </form>
+                                <!-- End Login Form -->
+                                <div class="hr"></div>
+                                <div class="foot">
+                                    <a href="otpmessage" id="forgotPasswordLink">Forgot Password?</a>
+                                </div>
+                                <div id="forgotPasswordModal" class="modal">
+                                    <div class="modal-content">
+                                        <span class="close" id="closeModal">&times;</span>
+                                        <p>Enter your phone number:</p>
+                                        <input type="text" id="forgotPhoneNumber" placeholder="Phone Number" required>
+                                        <button id="sendPasswordButton">Send Password</button>
+                                    </div>
+                                </div>
+                                <div class="foot">
+                                    <a href="/user_signup">New to Flybees</a>
+                                </div>
+
+                            </div>
+                           
+                                <div class="hr"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../include/login-footer') %>
+<script>
+    function validateSignUp() {
+        var username = document.getElementById("signup-user").value;
+        var password = document.getElementById("signup-pass").value;
+        var repeatPassword = document.getElementById("repeat-pass").value;
+        var email = document.getElementById("signup-email").value;
+        var number = document.getElementById("number").value;
+
+        if (username === "" || password === "" || repeatPassword === "" || email === "" || number === "") {
+            alert("All fields are required for sign-up.");
+            return false;
+        }
+
+        if (password !== repeat-Password) {
+            alert("Passwords do not match.");
+            return false;
+        }
+        if (email.indexOf('@') <= 0 || email.lastIndexOf('.') <= email.indexOf('@')) {
+            alert("Invalid email address.");
+            return false;
+        }
+
+        alert("Sign-up successful!");
+        return true;
+    }
+
+</script>
+</body>
+</html>
+
+
+

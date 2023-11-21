@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Your Title</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/outer.css">
+    <link rel="icon" type="image/png" href="/images/icons/favicon.png"/>
+</head>
+
+<body>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 mx-auto p-0">
+            <div class="card">
+                <div class="login-box">
+                    <div class="row">
+                        <div class="login-snip">
+                            <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+                            <label for="tab-1" class="tab">enter your phone-number</label>
+                            <input id="tab-2" type="radio" name="tab" class="sign-up">
+                            <label for="tab-2" class="tab"></label>
+                            <div class="login-space">
+                                <div class="login">
+                                    <!-- Login Form -->
+                                    <form id="loginForm" action="/otp" method="" onsubmit="validateForm()">
+                                        <div class="form-group">
+                                            <label for="login-user" class="label">phone number</label>
+                                            <input id="login-user" name="number" type="tel" class="form-control" placeholder="Enter your phone number">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button href="/otp" type="submit" class="btn btn-primary" id="sendOtpButton">Send OTP</button>
+                                        </div>
+                                    </form>
+
+                                    <div class="hr"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<script>
+    function validateForm() {
+        var phoneNumber = document.getElementById("login-user").value;
+
+        // Simple validation, you can enhance it based on your requirements
+        if (!phoneNumber || isNaN(phoneNumber) || phoneNumber.length !== 10) {
+            alert("Please enter a valid 10-digit phone number.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+</body>
+
+</html>
