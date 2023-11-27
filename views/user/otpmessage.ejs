@@ -24,19 +24,19 @@
                         <div class="login-snip">
                             <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
                             <label for="tab-1" class="tab">enter your phone-number</label>
-                            <input id="tab-2" type="radio" name="tab" class="sign-up">
+                            <input id="tab-2" type="radio" name="mobile" class="sign-up">
                             <label for="tab-2" class="tab"></label>
                             <div class="login-space">
                                 <div class="login">
                                     <!-- Login Form -->
-                                    <form id="loginForm" action="/otp" method="" onsubmit="validateForm()">
+                                    <form id="loginForm" action="/otpreset" method="post" onsubmit="validateForm()">
                                         <div class="form-group">
-                                            <label for="login-user" class="label">phone number</label>
-                                            <input id="login-user" name="number" type="tel" class="form-control" placeholder="Enter your phone number">
+                                            
+                                         <input id="login-user" name="mobile" type="tel" class="form-control" placeholder="Enter your phone number">
                                         </div>
 
                                         <div class="form-group">
-                                            <button href="/otp" type="submit" class="btn btn-primary" id="sendOtpButton">Send OTP</button>
+                                            <button href="/otpverification" type="submit" class="btn btn-primary" id="sendOtpButton">Send OTP</button>
                                         </div>
                                     </form>
 

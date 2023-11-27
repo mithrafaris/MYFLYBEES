@@ -7,11 +7,11 @@ const categorycontrol = require("../controllers/Admin/categorycontrol");
 const middleware=require("../middleware/middleware")
 const category=require("../model/category")
 const multer = require("../middleware/multer")
+const productControl=require("../controllers/Admin/productcontrol")
 admin_route.get("/dashboard", viewcontroll.dashboard);
 admin_route.post("/dashboard", viewcontroll.dashboard);
 
-admin_route.get("/productsDetails", viewcontroll.productsDetails);
-// admin_route.post("/productsDetails", viewcontroll.productsDetails);
+
 
 // userdetails
 admin_route.get("/user_details", viewcontroll.user_details);
@@ -36,7 +36,32 @@ admin_route.get("/Adminlogin", viewcontroll.Adminlogin);
  admin_route.get("/category/delete", categorycontrol.getCategoryDelete);
  
  admin_route.post("/category/search", categorycontrol.getSearch);
+
+
+
+
  
 
+ //product
+ admin_route.get( "/products",productControl.getProductList );
+          
+//admin_route.post("/products", adminAuth.isAdminLoggedIn);
+          
+admin_route.get("/products/addProduct",productControl.getAddProduct);
+          
+admin_route.post( "/products/addProduct",multer.upload.array("file"),productControl.postAddProduct );
+          
+admin_route.get("/products/edit",productControl.getEditProduct);
+          // productController.postEditProduct
+ admin_route.post("/products/edit", multer.upload.array("file"),productControl.postEditProduct);
+admin_route.get("/products/delete", productControl.getProductDelete);
+          
+admin_route.get("/product/deleteimage", productControl.deleteImages);
+          
+ admin_route.post("/products/search", productControl.getSearch);
+          
+
+
+ 
 
 module.exports = admin_route;

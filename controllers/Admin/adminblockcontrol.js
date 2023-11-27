@@ -7,6 +7,7 @@ const blockUser = async (req, res) => {
     const user = await userDB.findById(id);
 
     if (!user) {
+      
       return res.status(404).send("User not found");
     }
 

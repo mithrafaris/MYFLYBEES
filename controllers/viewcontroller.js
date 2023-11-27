@@ -2,8 +2,7 @@ const userDB = require("../model/userdetails_model")
 const category= require("../model/category")
 
 exports.homeRoutes = async (req, res) => {
-  res.render("home", { title: "Flybees" });
-};
+  res.render("home", { title: "Flybees" })}
 exports.about = (req, res) => {
   res.render("about", { title: "Flybees" });
 };
@@ -27,12 +26,15 @@ exports.shoping_cart = (req, res) => {
 exports.user_login = (req, res) => {
   res.render("user_login", { title: "Flybees" });
 };
-exports.otp = (req, res) => {
-  res.render("otp");
+exports.otpverification = (req, res) => {
+  res.render("otpverification");
 };
 
 exports.user_signup = (req, res) => {
   res.render("user_signup", { title: "Flybees" });
+};
+exports.resetPassword=(req,res)=>{
+  res.render("resetpassword", { title: "Flybees"})
 };
 
 

@@ -28,7 +28,12 @@
           
           <li>
             <a href="/admin/category">
-              <i class="zmdi zmdi-format-list-bulleted"></i> <span>categoryManagement</span>
+              <i class="zmdi zmdi-format-list-bulleted"></i> <span>category_details</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/products">
+              <i class="zmdi zmdi-format-list-bulleted"></i> <span>products_details</span>
             </a>
           </li>
          
@@ -78,7 +83,7 @@
     <div class="container-fluid">
      
       <div class="row mt-6">
-        <div class="col-lg-12">
+        <div class="col-lg-9">
           <div class="card">
             
             
@@ -93,7 +98,7 @@
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Product</h5>
+              <h5 class="card-title">userdetails</h5>
 			  <div class="table-responsive">
                <table class="table table-striped">
                   <thead>
@@ -106,6 +111,7 @@
 
                     </tr>
                   </thead>
+               
                   <tbody>
                     <tbody id="search">
                         <% if(user.length > 0) { %>

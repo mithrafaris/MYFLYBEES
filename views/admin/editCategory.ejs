@@ -56,13 +56,12 @@
     </header>
 
     <div class="content-wrapper">
-      <div class="container-fluid">
-        <div class="col-lg-6">
-     
+      <div class="container-fluid" >
+        <div class="col-lg-9">
+          <form action="" method="post" enctype="multipart/form-data">
             <div class="card-body">
   
               <div class="row align-items-center pt-4 pb-3">
-                <form action="" method="post" enctype="multipart/form-data">
                 <!-- <div class="col-md-3 ps-5">
                   <h6 class="mb-0">Category ID</h6>
                 </div> -->
@@ -100,16 +99,16 @@
                 <div class="col-md-3 ps-5" style="flex: 1;" >
     
                   <h6 class="mb-0" >Category Image upload</h6>
-                  <div class="thumbnail text-center" style="width: 600px; display: flex; justify-content: space-around;" >
+                 
                    
-                      <div style="width: 150px; height: 250px;">
-                      <img src="/uploads/<%=check.image %>" width="80"  style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; margin-left: 10px;margin-top: -20px;">
+                </div>
+                    
+                      <img src="/uploads/<%=check.image %>" width="100"  style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; margin-left: 10px;margin-top: -20px;">
                       <!-- <a href="/admin/category/deleteimage?catImg=<%=check.image %>" class="btn btn-outline-danger" style="margin-top: 10px;"><i class="fa fa-remove" style="font-size:15px"></i></a> -->
 
-                    </div>
+                   
                  
-                  </div>
-                </div>
+                  
                 <div style="flex: 1;">
                 <input class="form-control" name="file"  type="file" id="formFileMultiple" multiple />
               </div>
@@ -130,47 +129,6 @@
       <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
     </div><!-- End content-wrapper -->
 
-    <!-- End Back To Top Button -->
-
-    <!-- End footer -->
-
-    <!-- Start color switcher -->
-    <div class="right-sidebar">
-      <div class="switcher-icon">
-        <i class="zmdi zmdi-settings zmdi-hc-spin"></i>
-      </div>
-      <div class="right-sidebar-content">
-
-        <p class="mb-0">Gaussion Texture</p>
-        <hr>
-
-        <ul class="switcher">
-          <li id="theme1"></li>
-          <li id="theme2"></li>
-          <li id="theme3"></li>
-          <li id="theme4"></li>
-          <li id="theme5"></li>
-          <li id="theme6"></li>
-        </ul>
-
-        <p class="mb-0">Gradient Background</p>
-        <hr>
-
-        <ul class="switcher">
-          <li id="theme7"></li>
-          <li id="theme8"></li>
-          <li id="theme9"></li>
-          <li id="theme10"></li>
-          <li id="theme11"></li>
-          <li id="theme12"></li>
-          <li id="theme13"></li>
-          <li id="theme14"></li>
-          <li id="theme15"></li>
-        </ul>
-
-      </div>
-    </div>
-    <!-- End color switcher -->
 
   </div><!-- End wrapper -->
 

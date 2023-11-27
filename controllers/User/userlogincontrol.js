@@ -1,5 +1,8 @@
 const userDB = require("../../model/userdetails_model");
 const bcrypt = require("bcrypt");
+const otp=require("../../model/otp_model")
+const fast2sms=require('fast-two-sms')
+const API=process.env.API
 
 exports.loginUser = async (req, res) => {
   try {
@@ -18,7 +21,6 @@ exports.loginUser = async (req, res) => {
     if (passwordMatch) {
       req.session.userId = user.email;
       console.log(req.session.userId);
-      console.log("Session exists");
       res.redirect("/");
     } else {
       console.log("Incorrect password");
@@ -30,6 +32,30 @@ exports.loginUser = async (req, res) => {
   }
 };
 
+exports.forgetpassword = async (req, res) => {
+  console.log(req.body.mobile);
+  try {
+      const Number = await userDB.findOne({ mobile: req.body.mobile });
+
+      if (!Number) {
+          console.log("User not found");
+          return res.redirect("/user_login");
+      } else {
+          console.log("User available");      
+      }
+  } catch (error) {
+      console.error("Error during login:", error);
+      res.redirect("/otpmessage");
+  }
+}
+
+
+
+
+
+
+
+
 exports.logout = async (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -40,3 +66,6 @@ exports.logout = async (req, res) => {
     res.redirect("/user_login");
   });
 };
+
+
+  
