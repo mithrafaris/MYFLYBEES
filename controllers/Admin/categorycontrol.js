@@ -39,8 +39,8 @@ exports.getCategoryDelete = async (req, res) => {
   try {
     const id = req.query.id;
     console.log(id);
-    await Category.findOneAndUpdate({ _id: id }, { $set: { isList: false } });
-
+    await Category.findByIdAndDelete({ _id: id }, { $set: { isList: false } });
+console.log( Category);
     res.redirect("/admin/category");
   } catch (err) {
     console.error(err);
@@ -57,17 +57,19 @@ exports.getCategoryEditModal = async (req, res) => {
   }
 };
 
-//
+
 exports.postCategoryListEdit = async (req, res) => {
   try {
-    console.log("ith function ann");
-    const catId = req.body;
+   
+    const catId = req.body.categoryid;
     console.log(req.body);
-    const category = await Category.findOneAndUpdate(
-      { _id: catId },
-      {
+    const category = await Category.findByIdAndUpdate(
+   catId,
+      { 
         categoryName: req.body.categoryName,
         image: req.file.filename,
+      },{
+        new: true
       }
     );
     console.log(category);
@@ -92,16 +94,11 @@ exports.postCategoryAddCat = async (req, res) => {
     if (existing) {
       res.render("addCategory", { message: "Category already exists" });
     } else {
-      // const arrImages = [];
-      // for (let i = 0; i < req.files.length; i++) {
-      //     arrImages[i] = req.files[i].filename;
-      // }
-
+     
       const category = await Category.insertMany([
         {
           categoryName: req.body.categoryName,
           description: req.body.description,
-
           image: req.file.filename,
         },
       ]);
@@ -112,28 +109,7 @@ exports.postCategoryAddCat = async (req, res) => {
     console.error("add product", err.message);
   }
 
-  // try{
-  //     console.log(req.body.categoryName);
-  //     const existing =await Category.findOne({categoryName:req.body.categoryName})
-  //     console.log("existing",existing);
-  //     if(existing){
-
-  //              res.render('addCategory',{message:"Category already exists"})
-
-  //     }else {
-  //         // await Category.insertMany([{
-
-  //         //     categoryName:req.body.categoryName,
-  //         //     description:req.body.description,
-  //         //     image:req.file.filename
-  //         // }])
-  //          res.redirect('/admin/category')
-
-  //     }
-
-  // }catch(err){
-  //     console.error(err);
-  // }
+  
 };
 exports.getSearch = async (req, res) => {
   const searchQuery = new RegExp("^" + req.body.search, "i"); // Adding "i" flag for case-insensitive search
@@ -147,22 +123,4 @@ exports.getSearch = async (req, res) => {
       }
     }
   );
-};
-
-exports.postCategoryListEdit = (req, res) => {
-  try {
-    // Ensure that req.file is defined before accessing its properties
-    if (!req.file || !req.file.filename) {
-      throw new Error("File not uploaded properly");
-    }
-
-    // Your logic here
-    const filename = req.file.filename;
-    // Rest of your code
-
-    res.status(200).send("File uploaded successfully");
-  } catch (error) {
-    console.error(error);
-    res.status(400).send("Error uploading file");
-  }
 };

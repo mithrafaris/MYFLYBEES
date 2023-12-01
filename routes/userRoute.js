@@ -16,6 +16,8 @@ user_route.get('/product', viewcontroll.product);
 user_route.get('/shoping_cart', viewcontroll.shoping_cart);
 user_route.get('/otpmessage', viewcontroll.otpmessage);
 user_route.get('/otp',viewcontroll.otpverification)
+user_route.get('/Boyproduct',viewcontroll.Boyproduct )
+user_route.get('/girlproduct',viewcontroll.girlproduct)
 
 
 //user login

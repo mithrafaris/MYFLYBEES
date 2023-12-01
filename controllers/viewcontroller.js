@@ -36,6 +36,12 @@ exports.user_signup = (req, res) => {
 exports.resetPassword=(req,res)=>{
   res.render("resetpassword", { title: "Flybees"})
 };
+exports.Boyproduct=(req,res)=>{
+  res.render("Boy", { title:"Flybees"})
+}
+exports.girlproduct=(req,res)=>{
+  res.render("Girl", { title:"Flybees"})
+}
 
 
 

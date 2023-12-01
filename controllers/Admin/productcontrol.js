@@ -3,7 +3,7 @@ const Category = require('../../model/category');
 const fs = require('fs');
 const Products = require('../../model/productModel');
 
-module.exports.getProductList=async(req,res)=>{
+exports.getProductList=async(req,res)=>{
     try{
 
         const pdt = await Products.aggregate([
@@ -36,13 +36,17 @@ module.exports.getProductList=async(req,res)=>{
         console.error("getProductListerr",err.message);
     }
 }
-module.exports.getAddProduct = async (req, res) => {
-    const categories = await Category.find({isList:true})
-    console.log(categories);
-    res.render('addProduct',{categories:categories});
+exports.getAddProduct = async (req, res) => {
+    try {
+        const categories = await Category.find({ isList: true });
+        console.log(categories);
+        res.render('addProduct', { categories: categories });
+    } catch (err) {
+        console.error("getAddProduct error", err.message);
+    }
 };
 
-module.exports.postAddProduct = async (req, res) => {
+exports.postAddProduct = async (req, res) => {
     console.log(req.body)
    
     try {
@@ -81,7 +85,7 @@ module.exports.postAddProduct = async (req, res) => {
   
 };
 
-module.exports.getEditProduct = async(req,res)=>{
+exports.getEditProduct = async(req,res)=>{
     try{
         const id = req.query.id
         const product=await Products.findOne({_id:id})
@@ -98,7 +102,7 @@ module.exports.getEditProduct = async(req,res)=>{
        }
 }
 
-module.exports.deleteImages = async (req,res) => {
+exports.deleteImages = async (req,res) => {
         try{
           let deleteimage = req.query.images;
           const id = req.query.id
@@ -114,7 +118,7 @@ module.exports.deleteImages = async (req,res) => {
         }
       }
     // not working
-module.exports.postEditProduct=async(req,res)=>{
+exports.postEditProduct=async(req,res)=>{
     const price= Number(req.body.price)
     const stock = Number(req.body.stock)
     // console.log("post0",req.body);
@@ -158,19 +162,19 @@ module.exports.postEditProduct=async(req,res)=>{
       }
    
 }
-module.exports.getProductDelete = async(req,res)=>{
+exports.getProductDelete = async(req,res)=>{
     try{
         const id = req.query.id
 
         const product = await Products.findOne({_id:id})
-        await Category.findOneAndUpdate({_id:product.category}, { $inc: { quantity: -1 } })
-        await Products.findOneAndUpdate({_id:id},{$set:{isList:false}})
+        await Category.findByIdAndDelete({_id:product.category}, { $inc: { quantity: -1 } })
+        await Products.findByIdAndDelete({_id:id},{$set:{isList:false}})
         res.redirect('/admin/products')
     }catch(err){
         console.error("getProductDelete",err.message);
     }
 }
-module.exports.getSearch = async(req,res)=>{
+exports.getSearch = async(req,res)=>{
     const searchQuery = new RegExp("^" + req.body.search, "i"); // Adding "i" flag for case-insensitive search
 
     Products.find({ productName: { $regex: searchQuery } }).then((pdt) => {

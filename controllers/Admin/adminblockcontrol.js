@@ -1,6 +1,6 @@
 const userDB = require("../../model/userdetails_model");
 
-const blockUser = async (req, res) => {
+exports.blockUser = async (req, res) => {
   try {
     const id = req.query.id;
 
@@ -22,6 +22,3 @@ const blockUser = async (req, res) => {
   }
 };
 
-module.exports = {
-  blockUser
-};

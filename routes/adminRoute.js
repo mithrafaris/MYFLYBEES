@@ -8,6 +8,7 @@ const middleware=require("../middleware/middleware")
 const category=require("../model/category")
 const multer = require("../middleware/multer")
 const productControl=require("../controllers/Admin/productcontrol")
+const bannercontrol = require("../controllers/Admin/bannercontrol")
 admin_route.get("/dashboard", viewcontroll.dashboard);
 admin_route.post("/dashboard", viewcontroll.dashboard);
 
@@ -30,7 +31,7 @@ admin_route.get("/Adminlogin", viewcontroll.Adminlogin);
  admin_route.post("/category/addCategory", multer.upload.single("file"), categorycontrol.postCategoryAddCat);
  admin_route.get("/category/edit", categorycontrol.getCategoryEditModal);
 
- admin_route.post("/category/edit", categorycontrol.postCategoryListEdit);
+ admin_route.post("/category/edit", multer.upload.single("file"),categorycontrol.postCategoryListEdit);
  
  
  admin_route.get("/category/delete", categorycontrol.getCategoryDelete);
@@ -60,6 +61,17 @@ admin_route.get("/product/deleteimage", productControl.deleteImages);
           
  admin_route.post("/products/search", productControl.getSearch);
           
+//Banner
+admin_route.get('/banner',bannercontrol.getBanner)
+
+admin_route.get('/banner/addBanner',bannercontrol.getAddBanner)
+
+admin_route.post('/banner/addBanner',multer.upload.single("file"),bannercontrol.getPostAddBanner)
+
+admin_route.get('/banner/delete',bannercontrol.getBannerDelete)
+
+admin_route.post('/banner/search',bannercontrol.getBannerSearch)
+
 
 
  

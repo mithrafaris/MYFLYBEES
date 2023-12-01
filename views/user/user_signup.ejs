@@ -15,8 +15,13 @@
                                 <div class="login">
                                     <form action="/register" method="post" >
                                         <div class="group">
-                                            <label for="signup-user" class="label">Useremail</label>
-                                            <input id="signup-user" name="email" type="email" class="input"
+                                            <label for="signup-user" class="label">Username</label>
+                                            <input id="signup-user" name="name" type="name" class="input"
+                                                placeholder="Enter your Username">
+                                        </div>
+                                        <div class="group">
+                                            <label for="signup-email" class="label">Useremail</label>
+                                            <input id="signup-email" name="email" type="email" class="input"
                                                 placeholder="Create your Useremail">
                                         </div>
                                         <div class="group">
@@ -64,28 +69,13 @@
         </div>
     </div>
     <script type="text/javascript">
-        //     function validateLogin() {
-
-        //         var username = document.getElementById("login-user").value;
-        //         var password = document.getElementById("login-pass").value;
-
-        //         if (username === "" || password === "") {
-        //             alert("Please fill in all the fields.");
-        //             return false;
-        //         }
-        //         if (username.indexOf('@') <= 0 || username.lastIndexOf('.') <= username.indexOf('@')) {
-        //             alert("Invalid email address.");
-        //             return false;
-        //         }
-
-        //         alert("Login successful!");
-        //         return true;
-        //     }
+       
         function validateSignUp() {
-            var username = document.getElementById("signup-user").value;
+
+            var name = document.getElementById("signup-user").value;
+            var email = document.getElementById("signup-email").value;
             var password = document.getElementById("signup-pass").value;
             var repeatPassword = document.getElementById("repeat-pass").value;
-            var email = document.getElementById("signup-email").value;
             var number = document.getElementById("number").value;
 
             if (username === "" || password === "" || repeatPassword === "" || email === "" || number === "") {

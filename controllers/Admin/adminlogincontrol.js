@@ -3,9 +3,10 @@ const bcrypt = require("bcrypt");
 
 exports.Admin_login = async (req, res) => {
   try {
-    const { name, password } = req.body;
+   
+    const {email, password } = req.body;
 
-    const user = await userDB.findOne({ email: name, isadmin: true });
+    const user = await userDB.findOne({ email:email, isadmin: true });
 
     console.log(user);
     if (!user) {
