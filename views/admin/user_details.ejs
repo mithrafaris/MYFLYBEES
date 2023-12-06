@@ -186,6 +186,16 @@
 	
    
   </div><!--End wrapper-->
+  <script>
+    $(document).ready(function () {
+        $("#searchInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#search tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+    });
+</script>
 
 
   <!-- Bootstrap core JavaScript-->
@@ -202,7 +212,7 @@
   
   <!-- Custom scripts -->
   <script src="/js/app-script.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+ 
 	
 </body>
 </html>

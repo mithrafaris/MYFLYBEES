@@ -1,45 +1,43 @@
 const Category = require('../../model/category');
-
 const fs = require('fs');
 const Products = require('../../model/productModel');
 
-exports.getProductList=async(req,res)=>{
-    try{
-
+exports.getProductList = async (req, res) => {
+    try {
         const pdt = await Products.aggregate([
             {
-              $match: {
-                isList: true
-              }
+                $match: {
+                    isList: true
+                }
             }
-          ]);
-        // console.log(pdt);
-        if(pdt){
-            const itemsPerPage = 6; // Set the desired number of items per page
+        ]);
+
+        if (pdt) {
+            const itemsPerPage = 6;
             const currentPage = req.query.page ? parseInt(req.query.page) : 1;
             const totalItems = pdt.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage);
-            
-            // Calculate the startIndex and endIndex to load exactly 'itemsPerPage' items
+
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
-            
-            // Slice the array to get items for the current page, ensuring 'itemsPerPage' items
+
             const itemsToShow = pdt.slice(startIndex, endIndex);
-            
-            res.render('productManagement',{products:pdt,items: itemsToShow,
-                
+
+            res.render('productManagement', {
+                products: pdt,
+                items: itemsToShow,
                 totalPages: totalPages,
-                currentPage: currentPage,})
+                currentPage: currentPage,
+            });
         }
-    }catch(err){
-        console.error("getProductListerr",err.message);
+    } catch (err) {
+        console.error("getProductListerr", err.message);
     }
-}
+};
+
 exports.getAddProduct = async (req, res) => {
     try {
         const categories = await Category.find({ isList: true });
-        console.log(categories);
         res.render('addProduct', { categories: categories });
     } catch (err) {
         console.error("getAddProduct error", err.message);
@@ -47,12 +45,9 @@ exports.getAddProduct = async (req, res) => {
 };
 
 exports.postAddProduct = async (req, res) => {
-    console.log(req.body)
-   
     try {
-        
         const existing = await Products.findOne({ productName: req.body.productName });
-       
+
         if (existing) {
             res.render('addProduct', { message: "Product already exists" });
         } else {
@@ -61,156 +56,151 @@ exports.postAddProduct = async (req, res) => {
                 arrImages[i] = req.files[i].filename;
             }
             const category = await Category.findOne({ categoryName: req.body.category });
-            
-           
-            await Category.findOneAndUpdate({categoryName:req.body.category}, { $inc: { quantity: 1 } })
 
-            
-           const product = await Products.insertMany([{
+            await Category.findOneAndUpdate({ categoryName: req.body.category }, { $inc: { quantity: 1 } });
+
+            const product = await Products.insertMany([{
                 productName: req.body.productName,
                 price: Number(req.body.price),
                 stock: Number(req.body.stock),
                 description: req.body.description,
                 discount: req.body.discount,
-                 category: category._id,
+                category: category._id,
                 images: arrImages
             }]);
-            
+
             res.redirect('/admin/products');
         }
     } catch (err) {
-        console.error("add product",err.message);
+        console.error("add product", err.message);
     }
-
-  
 };
 
-exports.getEditProduct = async(req,res)=>{
-    try{
-        const id = req.query.id
-        const product=await Products.findOne({_id:id})
-        console.log((product._id).toString());
-        let pdtid=product.category.toString()
-        let cat=await Category.findOne({_id:product.category},{categoryName:1})
-         console.log("pdt",pdtid);
-       
-        const categories = await Category.find({isList:true});
-          console.log(cat.categoryName);
-        res.render('editProduct',{product:product,categoryName:cat.categoryName,pdtid,categories:categories})
-       }catch(err){
-        console.error("getEditProduct",err.message);
-       }
-}
+exports.getEditProduct = async (req, res) => {
+    try {
+        const id = req.query.id;
+        const product = await Products.findOne({ _id: id });
+        let pdtid = product.category.toString();
+        let cat = await Category.findOne({ _id: product.category }, { categoryName: 1 });
+        const categories = await Category.find({ isList: true });
 
-exports.deleteImages = async (req,res) => {
-        try{
-          let deleteimage = req.query.images;
-          const id = req.query.id
-          console.log(deleteimage);
-          
-          await Products.updateOne({}, { $unset: { images: deleteimage } });
-          const product = await Products.findOne({_id : id});
-          const categories = await Category.find({},{categoryName:1});
-          res.render('editProduct',{product,categories});
-        }
-        catch(err){
-          console.log("deleteImages",err.message);
-        }
-      }
-    // not working
-exports.postEditProduct=async(req,res)=>{
-    const price= Number(req.body.price)
-    const stock = Number(req.body.stock)
-    // console.log("post0",req.body);
-    try{
-        const pdtId = req.body.productIdentity
+        res.render('editProduct', { product: product, categoryName: cat.categoryName, pdtid, categories: categories });
+    } catch (err) {
+        console.error("getEditProduct", err.message);
+    }
+};
 
+exports.deleteImages = async (req, res) => {
+    try {
+        let deleteimage = req.query.images;
+        const id = req.query.id;
+
+        await Products.updateOne({}, { $unset: { images: deleteimage } });
+        const product = await Products.findOne({ _id: id });
+        const categories = await Category.find({}, { categoryName: 1 });
+
+        res.render('editProduct', { product, categories });
+    } catch (err) {
+        console.log("deleteImages", err.message);
+    }
+};
+
+exports.postEditProduct = async (req, res) => {
+    const price = Number(req.body.price);
+    const stock = Number(req.body.stock);
+
+    try {
+        const pdtId = req.body.productIdentity;
         const arrImages = [];
+
         for (let i = 0; i < req.files.length; i++) {
-        arrImages[i] = req.files[i].filename;
-    }
-    const imgs = await Products.find({_id:pdtId},{images:1,_id:0})
-    if(imgs.length>0){
+            arrImages[i] = req.files[i].filename;
+        }
 
-        const [{images}]=imgs
-        // console.log("alred",images);
-        images.forEach(item=>{
-            arrImages.push(item)
-        })
-    }
-    // arrImages.push(imgsList)
-    // console.log("imgsList",imgsList);
-    console.log("arrImages",arrImages);
-    
-    const filterImages= arrImages.filter((item, index) =>{return arrImages.indexOf(item) === index});
-    console.log("filterImages",filterImages);
-    const catId = await Category.findOne({categoryName:req.body.selectcategory},{_id:1})
-    // console.log(catId);
-        let data = await Products.updateOne({_id : pdtId},{$set : {productName: req.body.productName,
-            price: price,
-            stock: stock,
-            description: req.body.description,
-            discount: req.body.discount,
-            category: req.body.category,
-            images:filterImages
-        }});
-            
-        res.redirect('/admin/products')
-      }
-      catch(err){
-        console.log("postEditProduct",err.message);
-      }
-   
-}
-exports.getProductDelete = async(req,res)=>{
-    try{
-        const id = req.query.id
+        const imgs = await Products.find({ _id: pdtId }, { images: 1, _id: 0 });
 
-        const product = await Products.findOne({_id:id})
-        await Category.findByIdAndDelete({_id:product.category}, { $inc: { quantity: -1 } })
-        await Products.findByIdAndDelete({_id:id},{$set:{isList:false}})
-        res.redirect('/admin/products')
-    }catch(err){
-        console.error("getProductDelete",err.message);
+        if (imgs.length > 0) {
+            const [{ images }] = imgs;
+
+            images.forEach(item => {
+                arrImages.push(item);
+            });
+        }
+
+        const filterImages = arrImages.filter((item, index) => { return arrImages.indexOf(item) === index; });
+
+        const catId = await Category.findOne({ categoryName: req.body.selectcategory }, { _id: 1 });
+
+        let data = await Products.updateOne({ _id: pdtId }, {
+            $set: {
+                productName: req.body.productName,
+                price: price,
+                stock: stock,
+                description: req.body.description,
+                discount: req.body.discount,
+                category: req.body.category,
+                images: filterImages
+            }
+        });
+
+        res.redirect('/admin/products');
+    } catch (err) {
+        console.log("postEditProduct", err.message);
     }
-}
-exports.getSearch = async(req,res)=>{
-    const searchQuery = new RegExp("^" + req.body.search, "i"); // Adding "i" flag for case-insensitive search
+};
+
+exports.getProductDelete = async (req, res) => {
+    try {
+        const id = req.query.id;
+
+        const product = await Products.findOne({ _id: id });
+        await Category.findByIdAndUpdate({ _id: product.category }, { $inc: { quantity: -1 } });
+        await Products.findByIdAndDelete({ _id: id }, { $set: { isList: false } });
+
+        res.redirect('/admin/products');
+    } catch (err) {
+        console.error("getProductDelete", err.message);
+    }
+};
+
+exports.getSearch = async (req, res) => {
+    const searchQuery = new RegExp("^" + req.body.search, "i");
 
     Products.find({ productName: { $regex: searchQuery } }).then((pdt) => {
-      if (pdt.length === 0) {
-        const itemsPerPage = 6; // Set the desired number of items per page
+        if (pdt.length === 0) {
+            const itemsPerPage = 6;
             const currentPage = req.query.page ? parseInt(req.query.page) : 1;
             const totalItems = pdt.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage);
-            
-            // Calculate the startIndex and endIndex to load exactly 'itemsPerPage' items
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            
-            // Slice the array to get items for the current page, ensuring 'itemsPerPage' items
-            const itemsToShow = pdt.slice(startIndex, endIndex);
-        res.render('productManagement',{products:[],items: itemsToShow,
-            totalPages: totalPages,
-            currentPage: currentPage,})
 
-      } else {
-        const itemsPerPage = 6; // Set the desired number of items per page
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
+            const itemsToShow = pdt.slice(startIndex, endIndex);
+
+            res.render('productManagement', {
+                products: [],
+                items: itemsToShow,
+                totalPages: totalPages,
+                currentPage: currentPage,
+            });
+        } else {
+            const itemsPerPage = 6;
             const currentPage = req.query.page ? parseInt(req.query.page) : 1;
             const totalItems = pdt.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage);
-            
-            // Calculate the startIndex and endIndex to load exactly 'itemsPerPage' items
+
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
-            
-            // Slice the array to get items for the current page, ensuring 'itemsPerPage' items
+
             const itemsToShow = pdt.slice(startIndex, endIndex);
-            
-        res.render('productManagement',{products:pdt,items: itemsToShow,
-            totalPages: totalPages,
-            currentPage: currentPage,})
-      }
+
+            res.render('productManagement', {
+                products: pdt,
+                items: itemsToShow,
+                totalPages: totalPages,
+                currentPage: currentPage,
+            });
+        }
     });
-  
-}
+};

@@ -118,52 +118,55 @@
               
                             </div>
                             <div style="flex: 1;">
-    <select name="selectcategory" class="form-select mr-5" aria-label="Default select example">
-        <% if (categoryName) { %>
-            <option value="<%= categoryName %>" selected><%= categoryName %></option>
-        <% } %>
-        <% categories.forEach((category) => { %>
-            <% if (product.productCategory !== category.categoryName) { %>
-                <option value="<%= category.categoryName %>"><%= category.categoryName %></option>
-            <% } %>
-        <% }) %>
-    </select>
-</div>
+                              <select name="selectcategory" class="form-select mr-5" aria-label="Default select example">
+                                  <% if (typeof categoryName !== 'undefined') { %>
+                                      <option value="<%= categoryName %>" selected><%= categoryName %></option>
+                                  <% } %>
+                                  <% categories.forEach((category) => { %>
+                                      <% if (product && product.category !== category.categoryName) { %>
+                                          <option value="<%= category.categoryName %>"><%= category.categoryName %></option>
+                                      <% } %>
+                                  <% }) %>
+                              </select>
+                          </div>
+                          
           </div>
               
                 <hr class="mx-n3">
             
-                    <div class="row align-items-center py-3">
-                    <div class="col-md-3 ps-5">
+                <div class="row align-items-center py-3">
+                  <div class="col-md-3 ps-5">
+                      <h6 class="mb-0">Product Details</h6>
+                  </div>
+                  <div class="col-md-9 pe-5">
+                      <textarea class="form-control" rows="3" name="description">
+                          <% if (product && product.description) { %>
+                              <%= product.description %>
+                          <% } %>
+                      </textarea>
+                  </div>
+              </div>
               
-                     <h6 class="mb-0">Product Details</h6>
-              
-                       </div>
-                      <div class="col-md-9 pe-5">
-              
-                         <textarea class="form-control" rows="3"  name="description"><%=product.description %></textarea>
-              
-                            </div>
-                          </div>
             
                           <hr class="mx-n3">
             
                           <div class="row align-items-center py-3">
                             <div class="col-md-3 ps-5">
-                              
-                              <h6 class="mb-0">Product Images</h6>
-              
-                              <div class="thumbnail text-center" style="width: 600px; display: flex; justify-content: space-around;" >
-                                <% var images = product.images; %>
-                                <% for (var i=0;i< images.length;i++) { %>
-                                  <div style="width: 100px; height: 200px;">
-                                  <img src="/uploads/<%= images[i] %>" width="100"  style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; margin-left: 10px;">
-                                  <!-- <a href="/admin/product/deleteimage?productImages=<%=images[i]%>" class="btn btn-outline-danger" style="margin-top: 10px;"><i class="fa fa-remove" style="font-size:15px"></i></a> -->
-            
+                                <h6 class="mb-0">Product Images</h6>
+                                <div class="thumbnail text-center" style="width: 600px; display: flex; justify-content: space-around;">
+                                    <% if (product && product.images) { %>
+                                        <% var images = product.images; %>
+                                        <% for (var i=0; i < images.length; i++) { %>
+                                            <div style="width: 100px; height: 200px;">
+                                                <img src="/uploads/<%= images[i] %>" width="100" style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; margin-left: 10px;">
+                                                <a href="/admin/product/deleteimage?productImages=<%=images[i]%>" class="btn btn-outline-danger" style="margin-top: 10px;"><i class="fa fa-remove" style="font-size:15px"></i></a>
+                                            </div>
+                                        <% } %>
+                                    <% } %>
                                 </div>
-                                <% } %>
-                              </div>
                             </div>
+                        </div>
+                        
             
                           <hr class="mx-n3">
                           

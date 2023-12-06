@@ -9,7 +9,10 @@ const Schema = new mongoose.Schema({
   },
   mobile: {
     type: String,
-  },
+  } ,
+  otp:{
+    type:String
+},
 
   password: {
     type: String,
@@ -23,6 +26,55 @@ const Schema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  profileImage:{
+    type:String
+},
+cart:{
+    type:Array,
+} ,
+wallet:{
+    type:Number,
+    default:100,
+},
+address: {
+    items: [{
+        name: {
+            type: String,
+            required:true
+        },
+        phone: {
+            type:Number,
+            required: true,
+        },
+        houseNumber: {
+            type: String,
+            require: true
+        },
+        pincode:{
+            type:Number,
+            required: true,
+        },
+        address:{
+            type: String,
+            required:true
+        },
+        city: {
+            type: String,
+            required:true
+        },
+        state: {
+            type: String,
+            required:true
+        },
+        landmark: {
+            type: String
+        },
+        alternatePhone: {
+            type:Number
+        }
+    }]
+}
+
 });
 
 const userDB = mongoose.model("user_details", Schema);
