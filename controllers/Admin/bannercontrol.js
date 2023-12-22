@@ -68,7 +68,7 @@ exports.getBannerDelete=async(req,res)=>{
     try{
         const id = req.query.id
             
-        await Banner.findOneAndUpdate({_id:id},{$set:{isList:false}})
+        await Banner.findByIdAndDelete({_id:id},{$set:{isList:false}})
 
         res.redirect('/admin/banner')
     }catch(err){

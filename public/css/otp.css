@@ -62,3 +62,6 @@ input[type=number]::-webkit-outer-spin-button {
     border: 1px solid red;
     width: 140px
 }
+.imgOTP{
+    width: 70px;
+}

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+
 const categorySchema = new mongoose.Schema({
     
     categoryName:{
@@ -23,10 +24,10 @@ const categorySchema = new mongoose.Schema({
         type:Boolean,
         default:true,
     }
-  
+    
     
     
     
 })
-const category = mongoose.model("category", categorySchema);
-module.exports = category;
+const Category =  mongoose.model('Category',categorySchema)
+module.exports=Category
