@@ -1,4 +1,4 @@
-<%- include('../include/login-header') %>
+<%- include('../include/login-header'{ title: 'Flybees' }) %>
     <link rel="stylesheet" type="text/css" href="/css/outer.css">
     <link rel="icon" type="image/png" href="/images/icons/favicon.png" />
     <div class="row">
@@ -13,7 +13,7 @@
                             <label for="tab-2" class="tab"></label>
                             <div class="login-space">
                                 <div class="login">
-                                    <form action="/register" method="post" >
+                                    <form action="" method="post" >
                                         <div class="group">
                                             <label for="signup-user" class="label">Username</label>
                                             <input id="signup-user" name="name" type="name" class="input"
@@ -68,36 +68,8 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-       
-        function validateSignUp() {
-
-            var name = document.getElementById("signup-user").value;
-            var email = document.getElementById("signup-email").value;
-            var password = document.getElementById("signup-pass").value;
-            var repeatPassword = document.getElementById("repeat-pass").value;
-            var number = document.getElementById("number").value;
-
-            if (username === "" || password === "" || repeatPassword === "" || email === "" || number === "") {
-                alert("All fields are required for sign-up.");
-                return false;
-            }
-
-            if (password !== repeat - Password) {
-                alert("Passwords do not match.");
-                return false;
-            }
-            if (email.indexOf('@') <= 0 || email.lastIndexOf('.') <= email.indexOf('@')) {
-                alert("Invalid email address.");
-                return false;
-            }
-
-            alert("Sign-up successful!");
-            return true;
-        }
-    </script>
+   
     </body>
-
     </html>
     <%- include('../include/login-footer') %>
 

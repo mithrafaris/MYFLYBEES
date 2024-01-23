@@ -1,6 +1,4 @@
-const userDB = require("../../model/userdetails_model");
-const Category = require("../../model/category");
-
+const Category = require("../../model/categoryModel")
 exports.getCategoryList = async (req, res) => {
   try {
     const cat = await Category.aggregate([
@@ -27,7 +25,7 @@ exports.getCategoryList = async (req, res) => {
         categories: cat,
         items: itemsToShow,
 
-        totalPages: totalPages,
+        totalPages: totalPages, 
         currentPage: currentPage,
       });
     }
@@ -39,13 +37,14 @@ exports.getCategoryDelete = async (req, res) => {
   try {
     const id = req.query.id;
     console.log(id);
-    await Category.findByIdAndDelete({ _id: id }, { $set: { isList: false } });
+    await Category.findByIdAndDelete({ _id: id });
 console.log( Category);
     res.redirect("/admin/category");
   } catch (err) {
     console.error(err);
   }
 };
+
 exports.getCategoryEditModal = async (req, res) => {
   try {
     const id = req.query.id;
@@ -66,10 +65,8 @@ exports.postCategoryListEdit = async (req, res) => {
     const category = await Category.findByIdAndUpdate(
    catId,
       { 
-        categoryName: req.body.categoryName,
-        image: req.file.filename,
-      },{
-        new: true
+        categoryName: req.body.categoryName
+       
       }
     );
     console.log(category);
@@ -88,7 +85,7 @@ exports.postCategoryAddCat = async (req, res) => {
 
   try {
     const existing = await Category.findOne({
-      categoryName: req.body.categoryName,
+      categoryName: req.body.categoryName
     });
 
     if (existing) {

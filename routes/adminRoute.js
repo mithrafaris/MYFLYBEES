@@ -5,14 +5,18 @@ const adminlogincontrol = require("../controllers/Admin/adminlogincontrol");
 const adminblock = require('../controllers/Admin/adminblockcontrol');
 const categorycontrol = require("../controllers/Admin/categorycontrol");
 const middleware=require("../middleware/usermiddleware")
-const category=require("../model/category")
+const category=require("../model/categoryModel")
 const multer = require("../middleware/multer")
 const productControl=require("../controllers/Admin/productcontrol")
 const bannercontrol = require("../controllers/Admin/bannercontrol")
+const adminMiddleware = require("../middleware/adminMiddleware")
 
 //dashboard
 admin_route.get("/dashboard", viewcontroll.dashboard);
 admin_route.post("/dashboard", viewcontroll.dashboard);
+//adminlogin
+admin_route.post("/Adminlogin",adminMiddleware.is_Adminloggin, adminlogincontrol.Admin_login);
+admin_route.get("/Adminlogin", viewcontroll.Adminlogin);
 
 
 
@@ -20,8 +24,7 @@ admin_route.post("/dashboard", viewcontroll.dashboard);
 admin_route.get("/user_details", viewcontroll.user_details);
 admin_route.post("/user_details", viewcontroll.user_details);
 admin_route.get('/blockuser', adminblock.blockUser);
-admin_route.post("/Adminlogin", adminlogincontrol.Admin_login);
-admin_route.get("/Adminlogin", viewcontroll.Adminlogin);
+
 
 
 

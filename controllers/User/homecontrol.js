@@ -1,15 +1,17 @@
 const userDB = require("../../model/userdetails_model");
-const category = require("../../model/category");
+const category = require("../../model/categoryModel");
 const Products = require('../../model/productModel')
 const Banner = require("../../model/banner")
 
 
 exports.getHome = async (req, res) => {
+ 
       const getCartItems = async (user) => {
+      
               const cartData = [];
           
               for (const item of user.cart) {
-                const user = await userDB.findOne({ email: req.session.userId });
+                const user = await userDB.findOne({ email:req.session.userId });
                 const product = await Products.findOne({ _id: item.productId });
                 if (product) {
                   let total = item.count * product.price;
@@ -26,6 +28,7 @@ exports.getHome = async (req, res) => {
               let uniqueCartItems;
           
               if (user) {
+              
                 const cartData = await getCartItems(user);
                 let totalArr = [];
                 cartData.map((item) => {
@@ -66,9 +69,9 @@ exports.getHome = async (req, res) => {
             }
           };
 
-exports.getCart=async(req,res)=>{
+  exports.getCart=async(req,res)=>{
 
-            const getCartItems = async (user) => {
+        const getCartItems = async (user) => {
                 const cartData = [];
                 
                 for (const item of user.cart) {
@@ -88,7 +91,7 @@ exports.getCart=async(req,res)=>{
                 if (req.session.userId) {
         
                   const user = await userDB.findOne({ email: req.session.userId }, { cart: 1, _id: 0 });
-            //   console.log(user);
+              console.log(user);
             let sub
                   if (user) {
                     const cartData = await getCartItems(user);
@@ -119,16 +122,4 @@ exports.getCart=async(req,res)=>{
               
               
         }
-
-    exports.getProfile= async(req,res)=>{
-          try{
-              const user =await userDB.findOne({email:req.session.userId})
-              res.render('profile',{userdata:user,user:user})
-          }catch(err){
-              console.error("getProfile",err.message);
-          }
-      }
-
-    
-
    

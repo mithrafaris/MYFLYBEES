@@ -6,29 +6,30 @@
         <div class="top-bar">
             <div class="content-topbar flex-sb-m h-full container">
                 <div class="left-top-bar">
-                    Free shipping for standard order over  &#8377;1000
+                    Free shipping for standard order over &#8377;1000
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
                     <a href="#" class="flex-c-m trans-04 p-lr-25">
                         Help & FAQs
                     </a>
-                    <% if(locals.user){ %>
+                    <% if (locals.user) { %>
+                       
                         <a href="/profile" class="flex-c-m trans-04 p-lr-25">
-                            My Account
+                          <%= locals.user.name %>
                         </a>
-                        <% }else{ %>
-                      <div class="dropdown">
-                        <a class="btn  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Login as
-                        </a>
-                        <div class="dropdown-menu " style="z-index:3;" aria-labelledby="dropdownMenuButton" >
-                          <a class="dropdown-item" href="/user_login">User</a>
-                          <a class="dropdown-item" href="admin/Adminlogin">Admin</a>
-
+                    <% } else { %>
+                        <div class="dropdown">
+                            <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Login as
+                            </a>
+                            <div class="dropdown-menu" style="z-index: 3;" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="/user_login">User</a>
+                                <a class="dropdown-item" href="/admin_login">Admin</a> 
+                            </div>
                         </div>
-                    </div>
                     <% } %>
+                    
                         
                     <a href="#" class="flex-c-m trans-04 p-lr-25">
                         EN
@@ -45,7 +46,7 @@
             <nav class="limiter-menu-desktop container">
                 
                 <!-- Logo desktop -->		
-                <a href="/" class="logo text-decoration-none " style="color: #000;">
+                <a href="/" class="logo text-decoration-none" style="color: #000;">
                     <h1><span class="mainColor">FLY</span>BEES</h1>
                 </a>
 
@@ -54,7 +55,6 @@
                     <ul class="main-menu">
                         <li class="active-menu">
                             <a href="/">Home</a>
-                            
                         </li>
 
                         <li>
@@ -62,12 +62,11 @@
                         </li>
                         <li>
                             <% if (locals.user) { %>
-                              <a href="/cart">Cart</a>
+                                <a href="/cart">Cart</a>
                             <% } else { %>
-                              <a href="#" onclick="showLoginAlert()">Cart</a>
+                                <a href="#" onclick="showLoginAlert()">Cart</a>
                             <% } %>
-                          </li>
-                          
+                        </li>
 
                         <li>
                             <a href="/about">About</a>
@@ -78,59 +77,52 @@
                         </li>
                     </ul>
                 </div>	
-
+                
                 <!-- Icon header -->
                 <div class="wrap-icon-header flex-w flex-r-m">
-                    <!-- <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-                        <i class="zmdi zmdi-search"></i>
-                    </div> -->
                     <form action="/search" method="post">
-                               
-                        <!-- <button style="width: 10px;">search</button> -->
-                         <div class="header-search-wrapper">
-                             <button  class="sr-only">Search</button>
-                             <input type="search" class="form-control" name="search" id="search" placeholder="Search in..." required>
-                             
-                            </div><!-- End .header-search-wrapper -->
-                         
-                     </form>
+                        <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
+                            <i class="zmdi zmdi-search"></i>
+                            <div class="header-search-wrapper"></div>
+                        </div>
+                    </form>
+
                     <% if(locals.cart) {%>
-                    <% if(locals.user){ %>
-                    <div  class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="<%=cart.length %>">
-                        <i class="zmdi zmdi-shopping-cart"></i>
-                    </div>
-                    <% }else{ %>
-                        <a href="/user_login" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="0">
-                            <i class="zmdi zmdi-shopping-cart"></i>
-                        </a>
-                        <% } %>
-                        <% } %>
                         <% if(locals.user){ %>
-                    <!-- <a href="/wishlist" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
-                        <i class="zmdi zmdi-favorite-outline"></i>
-                    </a> -->
-                    <a href="/logout" id="logout-button" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 ">
-                        <i class="fas fa-sign-out-alt"></i> 
-                      </a>
-                    <% }else{ %>
+                            <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="<%=cart.length %>">
+                                <i class="zmdi zmdi-shopping-cart"></i>
+                            </div>
+                        <% } else { %>
+                            <a href="/user_login" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="0">
+                                <i class="zmdi zmdi-shopping-cart"></i>
+                            </a>
+                        <% } %>
+                    <% } %>
+
+                    <% if(locals.user){ %>
+                        <a href="/logout" id="logout-button" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 ">
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        </a>
+                    <% } else { %>
                         <a href="#" onclick="showLoginAlert()" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
                             <i class="zmdi zmdi-favorite-outline"></i>
-                         
-                          </a>
-                          
-                        <% } %>
+                        </a>
+                    <% } %>
                 </div>
             </nav>
         </div>	
     </div>
-<%-include('./sideCart.ejs') %>
+    
+    <!-- Include sideCart.ejs -->
+    <%- include('./sideCart.ejs') %>
+    
     <!-- Header Mobile -->
     <div class="wrap-header-mobile">
-        <!-- Logo moblie -->		
+        <!-- Logo mobile -->
         <div class="logo-mobile">
-              <a href="/" class="logo text-decoration-none " style="color: #000;">
-                    <h1><span class="mainColor">FLY</span>BEES</h1>
-                </a>
+            <a href="/" class="logo text-decoration-none" style="color: #000;">
+                <h1><span class="mainColor">FLY</span>BEES</h1>
+            </a>
         </div>
 
         <!-- Icon header -->
@@ -138,26 +130,28 @@
             <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
                 <i class="zmdi zmdi-search"></i>
             </div>
+
             <% if(locals.cart) {%>
-            <% if(locals.user){ %>
-                <div  class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="<%=cart.length %>">
-                    <i class="zmdi zmdi-shopping-cart"></i>
-                </div>
-                <% }else{ %>
+                <% if(locals.user){ %>
+                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="<%=cart.length %>">
+                        <i class="zmdi zmdi-shopping-cart"></i>
+                    </div>
+                <% } else { %>
                     <a href="/user_login" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="0">
                         <i class="zmdi zmdi-shopping-cart"></i>
                     </a>
-                    <% } %>
-                    <% if(locals.user){ %>
-                 <!-- <a href="/wishlist" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
-                    <i class="zmdi zmdi-favorite-outline"></i>
-                </a>  -->
-                <% }else{ %>
+                <% } %>
+
+                <% if(locals.user){ %>
+                    <a href="/wishlist" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
+                        <i class="zmdi zmdi-favorite-outline"></i>
+                    </a>
+                <% } else { %>
                     <a href="/user_login" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
                         <i class="zmdi zmdi-favorite-outline"></i>
                     </a>
-                    <% } %>
-                    <% } %>
+                <% } %>
+            <% } %>
         </div>
 
         <!-- Button show menu -->
@@ -167,7 +161,6 @@
             </span>
         </div>
     </div>
-
 
     <!-- Menu Mobile -->
     <div class="menu-mobile">
@@ -211,15 +204,14 @@
             <li>
                 <a href="/product">Shop</a>
             </li>
+
             <li>
                 <% if (locals.user) { %>
                     <a href="/cart">Cart</a>
-                <% }else{ %>
+                <% } else { %>
                     <a href="#" onclick="showLoginAlert()">Cart</a>
-                    <% } %>
+                <% } %>
             </li>
-
-            
 
             <li>
                 <a href="/about">About</a>
@@ -238,7 +230,7 @@
                 <img src="images/icons/icon-close2.png" alt="CLOSE">
             </button>
 
-            <form class="wrap-search-header flex-w p-l-15" action="" method="post">
+            <form class="wrap-search-header flex-w p-l-15" action="/search" method="post">
                 <button class="flex-c-m trans-04">
                     <i class="zmdi zmdi-search"></i>
                 </button>
@@ -247,8 +239,3 @@
         </div>
     </div>
 </header>
-
-
-
-
-

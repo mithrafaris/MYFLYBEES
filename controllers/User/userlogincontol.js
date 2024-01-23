@@ -1,70 +1,32 @@
 const userDB = require("../../model/userdetails_model");
 const bcrypt = require("bcrypt");
 
-
-
 exports.loginUser = async (req, res) => {
   try {
-    const user = await userDB.findOne({
-      email: req.body.email,
-      isadmin: false,
-    });
+    const { email, password } = req.body;
+    console.log("log in success");
+
+    const user = await userDB.findOne({email});
 
     if (!user) {
       console.log("User not found");
-      return res.redirect("/user_login");
+      return res.render('user_login', { message: "Invalid email or password" });
     }
 
-    const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (passwordMatch) {
-      req.session.userId = user.email;
-      console.log(req.session.userId);
-      res.redirect("/");
+      if (user.isBlock) {
+        return res.render('user_login', { message: "Your account is blocked. Please contact support." });
+      } else {
+        req.session.userId = user.email;
+        return res.redirect('/');
+      }
     } else {
-      console.log("Incorrect password");
-      res.redirect("/user_login");
+      return res.render('user_login', { message: "Invalid email or password" });
     }
-  } catch (error) {
-    console.error("Error during login:", error);
-    res.redirect("/user_login");
+  } catch (e) {
+    console.log("postlogin", e.message);
+    return res.render('user_login', { message: "An error occurred during login" });
   }
 };
-
-// exports.forgetpassword = async (req, res) => {
-//   console.log(req.body.mobile);
-//   try {
-//       const Number = await userDB.findOne({ mobile: req.body.mobile });
-
-//       if (!Number) {
-//           console.log("User not found");
-//           return res.redirect("/user_login");
-//       } else {
-//           console.log("User available");      
-//       }
-//   } catch (error) {
-//       console.error("Error during login:", error);
-//       res.redirect("/otpmessage");
-//   }
-// }
-
-
-
-
-
-
-
-
-exports.logout = async (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Error destroying session:", err);
-    } else {
-      console.log("Session destroyed");
-    }
-    res.redirect("/user_login");
-  });
-};
-
-
-  

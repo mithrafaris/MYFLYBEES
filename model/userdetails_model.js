@@ -30,7 +30,7 @@ const Schema = new mongoose.Schema({
     type:String
 },
 cart:{
-    type:Array,
+    type:Array
 } ,
 wallet:{
     type:Number,

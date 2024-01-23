@@ -1,5 +1,5 @@
-<%- include('./partials/header.ejs')  -%>
-<%- include('./partials/navbar.ejs')  -%>
+<%- include('../include/header', { title: 'Flybees' }) %>
+<%- include('../include/navbar', { title: 'Flybees' }) %>
 
 
 
@@ -7,7 +7,7 @@
 <!-- breadcrumb -->
 <div class="container">
 	<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg mt-5 pt-5">
-		<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+		<a href="/" class="stext-109 cl8 hov-cl1 trans-04">
 			Home
 			<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 		</a>
@@ -28,7 +28,7 @@
 					<div class="m-l-25 m-r--38 m-lr-0-xl text-center">
 						<span class="text-center text-danger ">No items</span><br>
 						
-							<a href="/products" class="btn btnStyle mt-2">
+							<a href="/product" class="btn btnStyle mt-2">
 								Shop Now
 							</a>
 						
@@ -50,7 +50,7 @@
 							<tr class="table_row">
 								<td class="column-1">
 									<div class="how-itemcart1">
-										<img src="/asset/uploads/<%= item.product.images[0] %>" alt="IMG">
+										<img src="/uploads/<%= item.product.images[0] %>" alt="IMG">
 									</div>
 								</td>
 								<td class="column-2"><%= item.product.productName %></td>
@@ -126,87 +126,67 @@
 	</div>
 </form>
 <script>
-const countVal = document.getElementById("countVal")
-let count=countVal.value
-// For the "btn-num-product-down" button
-document.querySelectorAll('.btn-num-product-down').forEach(button => {
-    button.addEventListener('click', function() {
-        // let inputField = this.nextElementSibling;
-        let numProduct = Number(count);
-        if (numProduct > 1) {
-            count = numProduct - 1;
-			console.log(count,"iamcount");
-			const productId = this.getAttribute('data-productId');
-		console.log(productId,"iamID");
-		axiosFetching(productId,count)
-
-        }else if(numProduct === 0){
-			countVal.value = 1
-			const productId = this.getAttribute('data-productId');
-		console.log(productId,"iamID");
-		axiosFetching(productId,count)
-			
+	document.addEventListener('DOMContentLoaded', function () {
+	    const countVal = document.getElementById("countVal");
+	
+	    if (countVal) {
+	        let count = countVal.value;
+	
+	        // For the "btn-num-product-down" button
+	        document.querySelectorAll('.btn-num-product-down').forEach(button => {
+		button.addEventListener('click', function () {
+		    let numProduct = Number(count);
+		    if (numProduct > 1) {
+		        count = numProduct - 1;
+		        const productId = this.getAttribute('data-productId');
+		        axiosFetching(productId, count);
+		    } else if (numProduct === 0) {
+		        countVal.value = 1;
+		        const productId = this.getAttribute('data-productId');
+		        axiosFetching(productId, count);
+		    }
+		});
+	        });
+	
+	        // For the "btn-num-product-up" button
+	        document.querySelectorAll('.btn-num-product-up').forEach(button => {
+		button.addEventListener('click', function () {
+		    let numProduct = Number(count);
+		    count = numProduct + 1;
+		    const productId = this.getAttribute('data-productId');
+		    axiosFetching(productId, count);
+		});
+	        });
+	    }
+	});
+	
+	function axiosFetching(prdId, count) {
+	    $.ajax({
+	        method: 'POST',
+	        url: '/updateQuantity',
+	        data: { productId: prdId, count: count },
+	        success: function (response) {
+		console.log("AJAX POST request to /updateQuantity was successful!");
+		console.log("Response:-----", response);
+	
+		const countInputs = document.getElementsByClassName(prdId);
+		for (let i = 0; i < countInputs.length; i++) {
+		    countInputs[i].value = Number(response.count);
 		}
-    });
-});
-
-// For the "btn-num-product-up" button
-document.querySelectorAll('.btn-num-product-up').forEach(button => {
-    button.addEventListener('click', function() {
-        // let inputField = this.previousElementSibling;
-
-        let numProduct = Number(count);
-        count = numProduct + 1;
-		console.log(count,"iamcount");
-		const productId = this.getAttribute('data-productId');
-		console.log(productId,"iamID");
-		axiosFetching(productId,count)
-    });
-});
-
-function axiosFetching(prdId,count){
-    $.ajax({
-        method: 'POST',
-        url: '/updateQuantity',
-        data: { productId: prdId,count:count },
-        success: function(response) {
-          console.log("AJAX POST request to /test-post was successful!");
-           console.log("Response:-----", response);
-					
-				// Select all input elements with the matching class name
-			const countInputs = document.getElementsByClassName(prdId);
-			// console.log(countInputs);
-			// Loop through the collection and update each input value
-			for (let i = 0; i < countInputs.length; i++) {
-				countInputs[i].value = Number(response.count);
-			}
-
 	
-			const id=document.getElementById(prdId)
-			// console.log(id);
-			id.innerHTML="&#8377; " + Number(response.indTotal)+".00"
-			const subtot=document.getElementById('subtot')
-			
-			
-			subtot.innerHTML ="&#8377; "+response.subTotal+".00";
-			const total=document.getElementById('total')
-			// console.log(tot);
-			
-			total.innerHTML ="&#8377; "+response.subTotal+".00";
-			
-		
-					
-
-        },
-        error: function(error) {
-          console.error("AJAX POST request to /test-post failed:", error);
-        }
-      });
-      
-}
-
-
-
-</script>
+		const id = document.getElementById(prdId);
+		id.innerHTML = "&#8377; " + Number(response.indTotal) + ".00";
+		const subtot = document.getElementById('subtot');
+		subtot.innerHTML = "&#8377; " + response.subTotal + ".00";
+		const total = document.getElementById('total');
+		total.innerHTML = "&#8377; " + response.subTotal + ".00";
+	        },
+	        error: function (error) {
+		console.error("AJAX POST request to /updateQuantity failed:", error);
+	        }
+	    });
+	}
+	</script>
 	
-<%- include('./partials/footer.ejs')  -%>
+	
+<%- include('../include/footer.ejs')  -%>
