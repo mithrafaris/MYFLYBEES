@@ -29,11 +29,16 @@ user_route.get('/product',productController.getProducts)
 
 //productdetail
 user_route.get('/product-detail',errorHandle.errorHandler,productDetailController.getProductDetail)
+user_route.post('/product-detail', productDetailController.postCartItem);
+
+user_route.post('/add-to-cart',productDetailController.postAddTocart)
 user_route.get('/filter-cat',filterCatController.getFilterCat)
 
 user_route.post('/filter-cat',filterCatController.postFiltercat)
-
-
+user_route.get('/cart',userhomecontrol.getCart)
+user_route.get('/cartDelete',userhomecontrol.getCartDelete)
+user_route.post('/updateQuantity',userhomecontrol.updateCart)
+user_route.post('/',productController.postProductSearch)
 
 
 

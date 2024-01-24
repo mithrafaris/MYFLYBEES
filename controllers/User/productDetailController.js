@@ -3,8 +3,6 @@ const Products = require("../../model/productModel");
 const Coupon = require("../../model/couponModel")
 const Order = require("../../model/orderModel")
 
-
-
 exports.getProductDetail = async (req, res) => {
   try {
     const id = req.query.id;
@@ -15,14 +13,12 @@ exports.getProductDetail = async (req, res) => {
     console.error("getProductDetail", err.message);
   }
 };
-
 exports.postCartItem = async(req,res)=>{
-
   try{ 
       const { productId, count } = req.body;
       // console.log("Message received from frontend:", productId, count, req.session.userId);
       
-      const Product = await Products.findOne({ _id: productId });
+      const product = await Products.findOne({ _id: productId });
      
         if (req.session.userId) {
           const user = await userDB.findOne({ email: req.session.userId }, { cart: 1, _id: 0 });
@@ -40,7 +36,6 @@ exports.postCartItem = async(req,res)=>{
           }
         
           if (found) {
-            console.log("its c0mming");
             await userDB.updateOne(
                 { email: req.session.userId, "cart.productId": req.body.productId },
                 { $inc: { "cart.$.count": parseInt(count) } } // Increment the count by the given value
@@ -65,3 +60,25 @@ exports.postCartItem = async(req,res)=>{
       console.error("postCartItem",err.message);
   }
 }
+
+exports.postAddTocart=async(req,res)=>{
+  try {
+      
+      // Extract data from the request body
+      const { quantity, productId } = req.body;
+  
+      // Perform database operation
+      // Assuming you have a 'Cart' collection with fields 'quantity' and 'productId'
+       await userDB.updateOne({email:req.session.userId},{$addToSet:{
+          cart:{count:quantity,productId:productId}
+      }})
+     res.redirect('/product-detail')
+  
+      // Respond to the frontend with a success message or data
+      // res.json({ success: true, message: 'Item added to cart successfully' });
+    } catch (err) {
+      console.error("Error adding item to cart:", err.message);
+      res.status(500).json({ success: false, message: 'Failed to add item to cart' });
+    }
+}
+

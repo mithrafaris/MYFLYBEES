@@ -2,8 +2,6 @@ const userDB = require("../../model/userdetails_model");
 const category = require("../../model/categoryModel");
 const Products = require('../../model/productModel')
 const Banner = require("../../model/banner")
-
-
 exports.getHome = async (req, res) => {
  
       const getCartItems = async (user) => {
@@ -18,8 +16,7 @@ exports.getHome = async (req, res) => {
                   cartData.push({ user: user, count: item.count, product: product, total: total });
                 }
               }
-          
-              return cartData;
+        return cartData;
             };
           
             try {
@@ -122,4 +119,77 @@ exports.getHome = async (req, res) => {
               
               
         }
-   
+        exports.getCartDelete=async(req,res)=>{
+          try{
+              const prdtId =req.query.id
+             
+                      const result = await userDB.updateOne(
+                        { email: req.session.userId }, 
+                        { $pull: { 'cart': { productId: prdtId } } }
+                        );
+                        res.redirect('/cart')
+                      // console.log(user.cart);
+               
+          }catch(err){
+              console.error("cartDelete",err.message);
+          }
+      }
+      exports.updateCart = async (req, res) => {
+        const getCartItems = async (user) => {
+            const cartData = [];
+    
+            for (const item of user.cart) {
+                const userDetails = await userDB.findOne({ email: req.session.userId });
+                const product = await Products.findOne({ _id: item.productId });
+                if (product) {
+                    let total = item.count * product.price;
+                    cartData.push({ user: userDetails, count: item.count, product: product, total: total });
+                }
+            }
+            return cartData;
+        };
+    
+        try {
+            const { productId, count } = req.body;
+    
+            const product = await Products.findOne({ _id: productId });
+    
+            if (product) {
+                if (count > product.stock) {
+                    return res.status(400).json({ success: false });
+                } else {
+                    await userDB.updateOne(
+                        { email: req.session.userId, "cart.productId": productId },
+                        { $set: { "cart.$.count": parseInt(count) } }
+                    );
+    
+                    const user = await userDB.findOne({ email: req.session.userId });
+                    let sub;
+    
+                    if (user) {
+                        const cartData = await getCartItems(user);
+                        let totalArr = [];
+                        cartData.map((item) => {
+                            totalArr.push(item.total);
+                        });
+    
+                        sub = totalArr.length !== 0 ? totalArr.reduce((acc, sum) => acc + sum) : 0;
+    
+                        return res.status(200).json({
+                            success: true,
+                            indTotal: count * product.price,
+                            count: count,
+                            productId: productId,
+                            subTotal: sub
+                        });
+                    }
+                }
+            } else if (req.session.userId === undefined) {
+                res.render('productDetail', { product, message: "Please Login" });
+            }
+        } catch (err) {
+            console.error("updateCart", err.message);
+            return res.status(500).json({ success: false, error: "Internal Server Error" });
+        }
+    };
+    

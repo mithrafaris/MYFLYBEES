@@ -25,3 +25,27 @@ exports.getProducts = async (req, res) => {
     console.error("getProducts ===> ", err.message);
   }
 };
+exports.postProductSearch= async(req,res)=>{
+  try{
+    console.log(req.body);
+    const user = await userDB.findOne({email:req.session.userId})
+    const category = await Category.aggregate([
+      {
+        $match:{
+          isList:true
+        }
+      }
+    ])
+    const searchQuery = new RegExp("^" + req.body.search, "i"); // Adding "i" flag for case-insensitive search
+    console.log(req.body.search);
+    const products = await Products.find({ productName: { $regex: searchQuery }, isList: true });
+    const p=await Products.find({})
+  if (products.length === 0) {
+    res.render('product', { products: p, user, category });
+  } else {
+    res.render('product', { products, user, category });
+  }
+}catch(err){
+    console.error("postProductSearch ===> ",err.message);
+}
+}

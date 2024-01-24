@@ -92,9 +92,9 @@
   document.querySelectorAll('.catbtn').forEach(button => {
     button.addEventListener('click', function() {
 
-      // console.log("hhh");
+      console.log("hhh");
       const catname = this.getAttribute('data-catname');
-      // console.log(catname);
+      console.log(catname);
       $.ajax({
         url:'/filter-cat',
         method:'post',

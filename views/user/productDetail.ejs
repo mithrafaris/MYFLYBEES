@@ -1,7 +1,7 @@
 <%- include('../include/header', { title: 'Flybees' }) %>
 <%- include('../include/navbar', { title: 'Flybees' }) %>
 
-
+          
 <!-- breadcrumb -->
 <div class="container" style="margin-top: 3rem;">
     <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
@@ -10,7 +10,14 @@
             <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
         </a>
 
-     
+        <!-- <a href="product.html" class="stext-109 cl8 hov-cl1 trans-04">
+            Men
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <span class="stext-109 cl4">
+            Lightweight Jacket
+        </span> -->
     </div>
 </div>
     
@@ -63,10 +70,10 @@
                 
             <div class="col-md-6 col-lg-5 p-b-30">
                 <div class="p-r-50 p-t-5 p-lr-0-lg">
-                   <h4 class="mtext-105 cl2 js-name-detail p-b-14">
-    <%= product.productName %>
-</h4>
-
+                    <h4 class="mtext-105 cl2 js-name-detail p-b-14">
+                       <%= product.productName %>
+                    </h4>
+                    
                     <span class="mtext-106 cl2">
                         Rs. <%= product.price %>
                     </span>
@@ -75,14 +82,11 @@
                         <%= product.description %>
                        
                     </p>
-                    <br>
-                    <br>
-                   
                     <button data-productid="<%= product._id %>"  class="mt-3 ml-5  flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
                                     
                         Add to cart
                     </button>
-             
+                    
                     <!--  -->
                     <div class="p-t-33">
                         <div class="flex-w flex-r-m p-b-10">
@@ -122,7 +126,7 @@
                     </div>
 
                     <!--  -->
-                    <!-- <div class="flex-w flex-m p-l-100 p-t-40 respon7 ">
+                    <div class="flex-w flex-m p-l-100 p-t-40 respon7 ">
                         <div class="flex-m bor9 p-r-10 m-r-11">
                             <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
                                 <i class="zmdi zmdi-favorite"></i>
@@ -140,7 +144,7 @@
                         <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Google Plus">
                             <i class="fa fa-google-plus"></i>
                         </a>
-                    </div> -->
+                    </div>
                 </div>
                 
             </div>
@@ -148,6 +152,8 @@
 
        
 </section>
+
+<script src="/asset/js/cart.js"></script>
 
 
 <%- include('../include/footer') %>
