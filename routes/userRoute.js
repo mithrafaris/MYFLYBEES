@@ -9,7 +9,8 @@ const errorHandle = require("../middleware/errorHandle");
 const productDetailController=require("../controllers/User/productDetailController")
 const productController=require("../controllers/User/productcontroller")
 const filterCatController=require("../controllers/User/filterCatController")
-
+const couponController=require("../controllers/User/couponController")
+const addressController=require("../controllers/User/addressController")
 
 
 user_route.get('/', userhomecontrol.getHome);
@@ -17,14 +18,20 @@ user_route.get('/user_login',userauth.isLogin,viewcontroll.user_login)
 user_route.post('/user_login',userauth.isLogin,userlogincontrol.loginUser)
 //otp
 user_route.get('/otplogin',userauth.isLogin,usersigncontrol.getOtp)
-user_route.post('/otplogin',userauth.otpVerify,usersigncontrol.postOtp)
+user_route.post('/otplogin',usersigncontrol.postOtp)
 user_route.get('/otpVerify',userauth.isLogin,usersigncontrol.getOtpVerify)
-user_route.post('/otpVerify',userauth.otpValidate,usersigncontrol.postOtpVerify)
+user_route.post('/otpVerify',usersigncontrol.postOtpVerify)
 
+//forgot password
+user_route.get('/forgot',userlogincontrol.getForgot)
+user_route.post('/forgot',userlogincontrol.postForgot)
+user_route.get('/resetPassword',userlogincontrol.getResetPassword)
+
+user_route.post('/resetPassword',userlogincontrol.postResetPassword)
 
 // usersignup
-user_route.get('/user_signup',viewcontroll.user_signup);
-user_route.post('/register', usersigncontrol.post_signup);
+user_route.get('/user_signup',userauth.isLogin,viewcontroll.user_signup);
+user_route.post('/register',userauth.isLogin, usersigncontrol.post_signup);
 user_route.get('/product',productController.getProducts)
 
 //productdetail
@@ -40,6 +47,18 @@ user_route.get('/cartDelete',userhomecontrol.getCartDelete)
 user_route.post('/updateQuantity',userhomecontrol.updateCart)
 user_route.post('/',productController.postProductSearch)
 
+//address
+user_route.get('/address',addressController.getAddress)
+user_route.post('/address',addressController.postAddress)
+user_route.get('/editaddress',addressController.getEditAddress)
+user_route.post('/editaddress',addressController.postEditAddress)
+user_route.get('/deleteaddress',addressController.deleteAddress)
+
+
+
+user_route.get('/checkout',productDetailController.getCheckout)
+
+user_route.post('/couponUpdate',couponController.postCouponUpdate)
 
 
 

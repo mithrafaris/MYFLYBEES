@@ -91,23 +91,49 @@
 <script>
   document.querySelectorAll('.catbtn').forEach(button => {
     button.addEventListener('click', function() {
-
-      console.log("hhh");
+      // Retrieve the category name from the clicked button
       const catname = this.getAttribute('data-catname');
-      console.log(catname);
+
+      // Make sure the URL is correct and matches the server-side endpoint
       $.ajax({
-        url:'/filter-cat',
-        method:'post',
-        data:{catname},
-        success:(data)=>{
-          console.log(data);
+        url: 'js/filter-cat', // Update this URL to the correct endpoint
+        method: 'post',
+        data: { catname }, // Send the category name as data
+        success: (data) => {
+          // Handle the response data appropriately
+          console.log(data); // For demonstration, log the response to the console
+          // Update the DOM or perform other actions based on the response
         },
-        error:()=>{
+        error: () => {
           alert('Error in filtering category.');
         }
-      })
-    })
-  })
+      });
+    });
+  });
 </script>
+<script>
+  document.querySelectorAll('.catbtn').forEach(button => {
+    button.addEventListener('click', function() {
+      // Retrieve the category name from the clicked button
+      const catname = this.getAttribute('data-catname');
+
+      // Make sure the URL is correct and matches the server-side endpoint
+      $.ajax({
+        url: 'js/filter-cat', // Update this URL to the correct endpoint
+        method: 'post',
+        data: { catname }, // Send the category name as data
+        success: (data) => {
+          // Handle the response data appropriately
+          console.log(data); // For demonstration, log the response to the console
+          // Update the DOM or perform other actions based on the response
+        },
+        error: () => {
+          alert('Error in filtering category.');
+        }
+      });
+    });
+  });
+</script>
+
 	
 <%- include('../include/footer') %>

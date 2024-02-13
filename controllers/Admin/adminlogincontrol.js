@@ -1,7 +1,7 @@
 const userDB = require("../../model/userdetails_model");
 const bcrypt = require("bcrypt");
 
-exports.Admin_login = async (req, res) => {
+exports.Adminlogin = async (req, res) => {
   try {
    
     const {email, password } = req.body;

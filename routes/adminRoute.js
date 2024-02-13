@@ -10,12 +10,13 @@ const multer = require("../middleware/multer")
 const productControl=require("../controllers/Admin/productcontrol")
 const bannercontrol = require("../controllers/Admin/bannercontrol")
 const adminMiddleware = require("../middleware/adminMiddleware")
+const couponController= require("../controllers/Admin/couponController")
 
 //dashboard
 admin_route.get("/dashboard", viewcontroll.dashboard);
 admin_route.post("/dashboard", viewcontroll.dashboard);
 //adminlogin
-admin_route.post("/Adminlogin",adminMiddleware.is_Adminloggin, adminlogincontrol.Admin_login);
+admin_route.post("/Adminlogin",adminMiddleware.is_Adminloggin, adminlogincontrol.Adminlogin);
 admin_route.get("/Adminlogin", viewcontroll.Adminlogin);
 
 
@@ -75,6 +76,13 @@ admin_route.get('/banner/delete',bannercontrol.getBannerDelete)
 
 admin_route.post('/banner/search',bannercontrol.getBannerSearch)
 
+// coupon management
+admin_route.get("/coupon", couponController.getCoupon);
+admin_route.get("/addcoupon", couponController.getAddcoupon);
+admin_route.post("/addcoupon", couponController.postAddcoupon);
+admin_route.get("/editCoupon", couponController.getEditCoupon);
+admin_route.post("/editCoupon", couponController.postEditCoupon);
+admin_route.get("/coupon/delete", couponController.getCouponDelete);
 
 
  

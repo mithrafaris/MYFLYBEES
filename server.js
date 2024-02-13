@@ -12,12 +12,12 @@ const userRoute = require('./routes/userRoute')
 const adminRoute = require('./routes/adminRoute');
 
 
-dotenv.config({ path: path.join(__dirname, 'config.env') });
+dotenv.config({ path: path.join(__dirname, '.env') });
 app.use(session({
   secret: "secret",
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false, maxAge: 3600000 }
+  cookieParser: { secure: false, maxAge: 3600000 }
 }));
 
 app.use((req, res, next) => {
