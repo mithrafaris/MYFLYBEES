@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema({
     },
     images: {
         type: Array,
-        // required: true,
+     
     },
         category: {
         type: mongoose.Schema.Types.ObjectId,
@@ -35,6 +35,6 @@ const productSchema = new mongoose.Schema({
     },
 });
 
-const Products = mongoose.model("ProductsModel", productSchema);
+const Products = mongoose.model("Products", productSchema);
 
 module.exports = Products;

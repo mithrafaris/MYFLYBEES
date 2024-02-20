@@ -11,7 +11,7 @@ const productController=require("../controllers/User/productcontroller")
 const filterCatController=require("../controllers/User/filterCatController")
 const couponController=require("../controllers/User/couponController")
 const addressController=require("../controllers/User/addressController")
-
+const orderController=require("../controllers/User/orderController")
 
 user_route.get('/', userhomecontrol.getHome);
 user_route.get('/user_login',userauth.isLogin,viewcontroll.user_login)
@@ -21,7 +21,8 @@ user_route.get('/otplogin',userauth.isLogin,usersigncontrol.getOtp)
 user_route.post('/otplogin',usersigncontrol.postOtp)
 user_route.get('/otpVerify',userauth.isLogin,usersigncontrol.getOtpVerify)
 user_route.post('/otpVerify',usersigncontrol.postOtpVerify)
-
+//profile
+user_route.get('/profile',userhomecontrol.getProfile)
 //forgot password
 user_route.get('/forgot',userlogincontrol.getForgot)
 user_route.post('/forgot',userlogincontrol.postForgot)
@@ -39,9 +40,9 @@ user_route.get('/product-detail',errorHandle.errorHandler,productDetailControlle
 user_route.post('/product-detail', productDetailController.postCartItem);
 
 user_route.post('/add-to-cart',productDetailController.postAddTocart)
-user_route.get('/filter-cat',filterCatController.getFilterCat)
+ user_route.get('/filter-cat',filterCatController.getFilterCat)
 
-user_route.post('/filter-cat',filterCatController.postFiltercat)
+ user_route.post('/filter-cat',filterCatController.postFiltercat)
 user_route.get('/cart',userhomecontrol.getCart)
 user_route.get('/cartDelete',userhomecontrol.getCartDelete)
 user_route.post('/updateQuantity',userhomecontrol.updateCart)
@@ -57,17 +58,22 @@ user_route.get('/deleteaddress',addressController.deleteAddress)
 
 
 user_route.get('/checkout',productDetailController.getCheckout)
+user_route.post('/checkout',productDetailController.postCheckout)
 
 user_route.post('/couponUpdate',couponController.postCouponUpdate)
+//order
+
+ user_route.get('/orders',orderController.getOrders)
+
+//user_route.post('/verifyPayment', orderController.postVerifyPayment);
 
 
 
 
 
 
-
-
-
+ //conform order
+user_route.get('/confirm-order',productDetailController.getConfirmOrder)
 user_route.get('/logout',(req,res)=>{
     req.session.userId = null
     res.redirect('/')

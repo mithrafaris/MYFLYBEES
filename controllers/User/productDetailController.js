@@ -190,3 +190,101 @@ exports.getConfirmOrder = async (req, res) => {
     console.error("getConfirmOrder", err.message);
   }
 };
+exports.postCheckout = async(req,res)=>{
+  const getCartItems = async (user) => {
+    const cartData = [];
+    for (const item of user.cart) {
+    const user =await userDB.findOne({email:req.session.userId})
+      const product = await Products.findOne({ _id: item.productId });
+      if (product) {
+        let total = item.count * product.price;
+           
+        cartData.push({user:user, count: item.count, product: product,total:total });
+      }
+    }
+    return cartData;
+  };
+    try{
+      const grandTotal = Number(req.body.total);
+      const paymentMode = req.body.paymentMode;
+      const address= req.body.address;
+
+ console.log("chekout",req.body);
+const user = await userDB.findOne({ email: req.session.userId }, { cart: 1 });
+// console.log("user========",user);
+if (user) {
+
+  const orderItems = [];
+  user.cart.forEach(item => {
+    orderItems.push({
+    product_id: item.productId,
+    quantity: item.count,
+})});
+// console.log(orderItems,"---------->ORDER ITEM");
+orderItems.forEach(async (orderItem) => {
+  try {
+    // Find the product in the database by product_id
+    const product = await Products.findOne({_id: orderItem.product_id });
+    
+// console.log("productts======",product);
+    // If the product is found, decrement the stock_quantity
+    if (product) {
+      product.stock -= orderItem.quantity;
+
+      // Save the updated product back to the database
+      await product.save();
+    }
+    
+        // const coupon = await Coupon.findOneAndUpdate(
+        //     { _id: couponId },
+        //     {
+        //       $push: { userId: user._id }
+        //     },
+        //     { new: true } // To return the updated document
+        //   );
+          
+          // console.log("Updated Coupon:", coupon);
+  } catch (error) {
+    console.error('Error updating product stock:', error);
+  }
+});
+
+  const orderid =generateShortUUID();
+const currentDate = new Date();
+// Add 10 days to the current date I am setting 10days after purchase date for delivery date
+
+const updatedDate=currentDate.setDate(currentDate.getDate() + 10);
+const order = await Order.create({
+    orderId:orderid,
+    address:address,
+    user: user._id, 
+    orderItems:orderItems,
+    paymentMethod: paymentMode,
+    totalAmount: grandTotal,
+    orderItems: orderItems,
+    deliveryDate:updatedDate
+  });
+
+
+// console.log(updatedDateAsString);
+ // console.log(order);
+  await userDB.updateOne(
+    {email:req.session.userId},
+    {$unset:{"cart":1}}
+    )
+    return res.status(200).json({ success: true });
+}
+
+     
+      
+      
+    }catch(err){
+        console.error("postCheckout",err.message);
+        res.status(400).json({success: false})
+    }
+}
+
+
+module.exports.postCodCheckout=async(req,res)=>{
+  console.log("inside code",req.body);
+}

@@ -1,61 +1,61 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-    orderId : {
-        type : String,
-        required : true
+    orderId: {
+        type: String,
+        required: true
     },
-    user:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
         
     },
-    orderItems : {
-        type : [
+    orderItems: {
+        type: [
             {
                 product_id: mongoose.Schema.Types.ObjectId,
                 quantity: Number,
-                orderStatus : {
-                    type : String,
-                    default : "pending"
+                orderStatus: {
+                    type: String,
+                    default: "pending"
                 }
             }
         ],
-        required : true
+        required: true
     },
-    orderCancleRequest: {
+    orderCancelRequest: {
         type: Boolean,
         default: false
     },
-    orderCancelReason:{
-        type:String
+    orderCancelReason: {
+        type: String
     },
     orderReturnRequest: {
         type: Boolean,
         default: false
     },
-    orderReturnReason:{
+    orderReturnReason: {
         type: String
     },
-    totalAmount : {
-        type : Number,
+    totalAmount: {
+        type: Number,
     },
-    purchaseDate : {
-        type : Date,
-        default : new Date()
+    purchaseDate: {
+        type: Date,
+        default: new Date()
     },
-    deliveryDate : {
-        type : Date,
-        default : null
+    deliveryDate: {
+        type: Date,
+        default: null
     },
-    paymentMethod :{
-        type : String,
+    paymentMethod: {
+        type: String,
     },
-    address:{
-        type:String,
+    address: {
+        type: String,
     }
-})
+});
 
-const Order = mongoose.model("Order",orderSchema);
+// Check if the model already exists to avoid redefining it
+const Order = mongoose.model('Order', orderSchema);
 
-exports = Order;
+module.exports = Order;

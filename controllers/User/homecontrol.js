@@ -192,4 +192,11 @@ exports.getHome = async (req, res) => {
             return res.status(500).json({ success: false, error: "Internal Server Error" });
         }
     };
-    
+    exports.getProfile= async(req,res)=>{
+      try{
+          const user =await userDB.findOne({email:req.session.userId})
+          res.render('profile',{userdata:user,user:user})
+      }catch(err){
+          console.error("getProfile",err.message);
+      }
+  }

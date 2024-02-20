@@ -95,7 +95,7 @@ exports.deleteImages = async (req, res) => {
         let deleteimage = req.query.images;
         const id = req.query.id;
 
-        await Products.updateOne({}, { $unset: { images: deleteimage } });
+        await Products.updateOne({_id: id}, { $unset: { images: deleteimage } });
         const product = await Products.findOne({ _id: id });
         const categories = await Category.find({}, { categoryName: 1 });
 
