@@ -12,6 +12,7 @@ const bannercontrol = require("../controllers/Admin/bannercontrol")
 const adminMiddleware = require("../middleware/adminMiddleware")
 const couponController= require("../controllers/Admin/couponController")
 const orderController = require("../controllers/Admin/OrderControl")
+const walletController=require("../controllers/Admin/walletController")
 
 
 //dashboard
@@ -31,7 +32,7 @@ admin_route.get('/blockuser', adminblock.blockUser);
 
 
 
-//  //category
+ //category
  admin_route.get("/Category", categorycontrol.getCategoryList);
  admin_route.get("/category/addCategory", categorycontrol.getCategoryAddCat);
  admin_route.post("/category/addCategory", multer.upload.single("file"), categorycontrol.postCategoryAddCat);
@@ -44,7 +45,7 @@ admin_route.get('/blockuser', adminblock.blockUser);
  admin_route.post("/category/search", categorycontrol.getSearch);
 
 
-//  //product
+ //product
  admin_route.get( "/products",productControl.getProductList );
           
 
@@ -58,7 +59,7 @@ admin_route.get("/products/addProduct",productControl.getAddProduct);
   admin_route.post("/products/edit", multer.upload.array("file"),productControl.postEditProduct);
  admin_route.get("/products/delete", productControl.getProductDelete);
           
-admin_route.get("/product/deleteimage", productControl.deleteImages);
+//admin_route.get("/product/deleteimage", productControl.deleteImages);
           
  admin_route.post("/products/search", productControl.getSearch);
           
@@ -82,10 +83,13 @@ admin_route.post("/editCoupon", couponController.postEditCoupon);
 admin_route.get("/coupon/delete", couponController.getCouponDelete);
 //order manadement 
 admin_route.get( "/order", orderController.getOrderList);
+admin_route.get( "/order/admindetails",orderController.getOrderDetails);
+admin_route.post("/orderUpdate", orderController.postOrderUpdate);
+admin_route.post("/cancelOrder", orderController.postCancelOrder);
+admin_route.post('/filter-order',orderController.postFilterOrder)
 
-
-
-
+// wallet
+admin_route.get('/wallet',walletController.getWallet)
 
 
 

@@ -12,6 +12,9 @@ const filterCatController=require("../controllers/User/filterCatController")
 const couponController=require("../controllers/User/couponController")
 const addressController=require("../controllers/User/addressController")
 const orderController=require("../controllers/User/orderController")
+const walletController = require('../controllers/User/walletController')
+
+
 
 user_route.get('/', userhomecontrol.getHome);
 user_route.get('/user_login',userauth.isLogin,viewcontroll.user_login)
@@ -65,10 +68,16 @@ user_route.post('/couponUpdate',couponController.postCouponUpdate)
 
  user_route.get('/orders',orderController.getOrders)
 
-//user_route.post('/verifyPayment', orderController.postVerifyPayment);
+user_route.post('/verifyPayment', orderController.postVerifyPayment);
+user_route.post('/createOrder', orderController.postCreateOrder);
+user_route.get('/cancel',orderController.getProductCancel)
+user_route.post('/product-cancel',orderController.productCancel)
+user_route.get('/return',orderController.getReturn)
 
 
-
+//wallet
+user_route.get('/wallet',walletController.getWallet)
+user_route.post('/wallet-order',walletController.postWallet)
 
 
 

@@ -6,13 +6,11 @@
         <div class="top-bar">
             <div class="content-topbar flex-sb-m h-full container">
                 <div class="left-top-bar">
-                    Free shipping for standard order over &#8377;1000
+                   
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        Help & FAQs
-                    </a>
+                 
                     <% if (locals.user) { %>
                        
                         <a href="/profile" class="flex-c-m trans-04 p-lr-25">
@@ -31,13 +29,9 @@
                     <% } %>
                     
                         
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        EN
-                    </a>
+                 
 
-                    <a href="#" class="flex-c-m trans-04 p-lr-25">
-                        USD
-                    </a>
+                   
                 </div>
             </div>
         </div>
@@ -53,28 +47,18 @@
                 <!-- Menu desktop -->
                 <div class="menu-desktop">
                     <ul class="main-menu">
-                        <li class="active-menu">
-                            <a href="/">Home</a>
-                        </li>
+                      
 
-                        <li>
-                            <a href="/product">Shop</a>
-                        </li>
-                        <li>
+                       
+                        <!-- <li>
                             <% if (locals.user) { %>
                                 <a href="/cart">Cart</a>
                             <% } else { %>
                                 <a href="#" onclick="showLoginAlert()">Cart</a>
                             <% } %>
-                        </li>
+                        </li> -->
 
-                        <li>
-                            <a href="/about">About</a>
-                        </li>
-
-                        <li>
-                            <a href="/contact">Contact</a>
-                        </li>
+                       
                     </ul>
                 </div>	
                 
@@ -213,13 +197,7 @@
                 <% } %>
             </li>
 
-            <li>
-                <a href="/about">About</a>
-            </li>
-
-            <li>
-                <a href="/contact">Contact</a>
-            </li>
+            
         </ul>
     </div>
 

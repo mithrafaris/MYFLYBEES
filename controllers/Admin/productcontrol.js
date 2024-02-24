@@ -131,17 +131,35 @@ exports.postEditProduct = async (req, res) => {
 
         const catId = await Category.findOne({ categoryName: req.body.selectcategory }, { _id: 1 });
 
-        let data = await Products.updateOne({ _id: pdtId }, {
-            $set: {
-                productName: req.body.productName,
-                price: price,
-                stock: stock,
-                description: req.body.description,
-                discount: req.body.discount,
-                category: req.body.category,
-                images: filterImages
-            }
-        });
+        let data;
+        
+        if (stock <= 0) {
+            // If stock is zero or negative, handle it accordingly
+            data = await Products.updateOne({ _id: pdtId }, {
+                $set: {
+                    productName: req.body.productName,
+                    price: price,
+                    stock: 0, // Set stock as 0 to indicate out of stock
+                    description: req.body.description,
+                    discount: req.body.discount,
+                    category: req.body.category,
+                    images: filterImages
+                }
+            });
+        } else {
+            // If stock is positive, update normally
+            data = await Products.updateOne({ _id: pdtId }, {
+                $set: {
+                    productName: req.body.productName,
+                    price: price,
+                    stock: stock,
+                    description: req.body.description,
+                    discount: req.body.discount,
+                    category: req.body.category,
+                    images: filterImages
+                }
+            });
+        }
 
         res.redirect('/admin/products');
     } catch (err) {
@@ -154,6 +172,8 @@ exports.getProductDelete = async (req, res) => {
         const id = req.query.id;
 
         const product = await Products.findOne({ _id: id });
+        // Ensure stock doesn't go below zero
+        const newQuantity = Math.max(0, product.stock - 1);
         await Category.findByIdAndUpdate({ _id: product.category }, { $inc: { quantity: -1 } });
         await Products.findByIdAndDelete({ _id: id }, { $set: { isList: false } });
 
@@ -162,6 +182,7 @@ exports.getProductDelete = async (req, res) => {
         console.error("getProductDelete", err.message);
     }
 };
+
 
 exports.getSearch = async (req, res) => {
     const searchQuery = new RegExp("^" + req.body.search, "i");

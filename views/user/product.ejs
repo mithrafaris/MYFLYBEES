@@ -1,6 +1,25 @@
 <%- include('../include/header', { title: 'Flybees' }) %>
-<%- include('../include/navbar', { title: 'Flybees' }) %>
+<%- include('../include/profileNav',{ title: 'Flybees' })  -%>
 <!-- Product -->
+<style>
+    .pagination {
+      display: inline-block;
+    }
+    
+    .pagination a {
+      color: black;
+      float: left;
+      padding: 8px 16px;
+      text-decoration: none;
+    }
+    
+    .pagination a.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    .pagination a:hover:not(.active) {background-color: #ddd;}
+    </style>
 <section class="bg0 p-t-23 p-b-140 mt-5">
     <div class="container">
         <div class="p-b-10">
@@ -40,100 +59,53 @@
                     <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search">
                 </div>	
             </div>
-
             
         </div>
 
-<!-- PRODUCT -->
+        <!-- PRODUCT -->
         
-<div class="row isotope-grid">
-  <% products.forEach(function(pdt, index) { %>
-      <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-          <!-- Block2 -->
-          <div class="block2">
-              <div class="block2-pic hov-img0">
-                <a href="/product-detail?id=<%= pdt._id %>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-
-                  <img style="width: 300px;height: 300px;" src="/uploads/<%= pdt.images[0] %>"  alt="IMG-PRODUCT">
-                 </a>
-              </div>
-              <div class="block2-txt flex-w flex-t p-t-14">
-                  <div class="block2-txt-child1 flex-col-l ">
-                      <a href="/product-detail?id=<%= pdt._id %>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                        <%= pdt.productName %>
-                      </a>
-                      <span class="stext-105 cl3">
-                        &#8377; <%= pdt.price %>
-                      </span>
-                  </div>
-                  <div class="block2-txt-child2 flex-r p-t-3">
-                      <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-                          <img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-                          <img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-                      </a>
-                  </div>
-              </div>
-          </div>
-      </div>
-  <% }) %>
-</div>
-
-<!-- PRODUCT END  -->
-
-
-            </div>
+        <div class="row isotope-grid">
+            <% products.forEach(function(pdt, index) { %>
+                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                    <!-- Block2 -->
+                    <div class="block2">
+                        <div class="block2-pic hov-img0">
+                            <a href="/product-detail?id=<%= pdt._id %>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                <img style="width: 300px;height: 300px;" src="/uploads/<%= pdt.images[0] %>"  alt="IMG-PRODUCT">
+                            </a>
+                        </div>
+                        <div class="block2-txt flex-w flex-t p-t-14">
+                            <div class="block2-txt-child1 flex-col-l ">
+                                <a href="/product-detail?id=<%= pdt._id %>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    <%= pdt.productName %>
+                                </a>
+                                <span class="stext-105 cl3">
+                                    <% if (pdt.stock <= 0) { %>
+                                        Out of Stock
+                                    <% } else { %>
+                                        &#8377; <%= pdt.price %>
+                                    <% } %>
+                                </span>
+                            </div>
+                            <div class="block2-txt-child2 flex-r p-t-3">
+                                <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                    <img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
+                                    <img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
         </div>
 
-       
+        <!-- PRODUCT END  -->
     </div>
+   
+    
 </section>
 
-<script>
-  document.querySelectorAll('.catbtn').forEach(button => {
-    button.addEventListener('click', function() {
-      // Retrieve the category name from the clicked button
-      const catname = this.getAttribute('data-catname');
 
-      // Make sure the URL is correct and matches the server-side endpoint
-      $.ajax({
-        url: 'js/filter-cat', // Update this URL to the correct endpoint
-        method: 'post',
-        data: { catname }, // Send the category name as data
-        success: (data) => {
-          // Handle the response data appropriately
-          console.log(data); // For demonstration, log the response to the console
-          // Update the DOM or perform other actions based on the response
-        },
-        error: () => {
-          alert('Error in filtering category.');
-        }
-      });
-    });
-  });
-</script>
-<script>
-  document.querySelectorAll('.catbtn').forEach(button => {
-    button.addEventListener('click', function() {
-      // Retrieve the category name from the clicked button
-      const catname = this.getAttribute('data-catname');
+<script src="/assets/js/filterCat.js"></script>
 
-      // Make sure the URL is correct and matches the server-side endpoint
-      $.ajax({
-        url: 'js/filter-cat', // Update this URL to the correct endpoint
-        method: 'post',
-        data: { catname }, // Send the category name as data
-        success: (data) => {
-          // Handle the response data appropriately
-          console.log(data); // For demonstration, log the response to the console
-          // Update the DOM or perform other actions based on the response
-        },
-        error: () => {
-          alert('Error in filtering category.');
-        }
-      });
-    });
-  });
-</script>
-
-	
 <%- include('../include/footer') %>

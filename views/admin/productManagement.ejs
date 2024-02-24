@@ -53,7 +53,8 @@
                             </div>
                         </td>
                         <td>&#8377; <%= items[i].price %></td>
-                        <td><%= items[i].stock %></td>
+                        <td><%= items[i].stock < 0 ? 0 : items[i].stock %></td>
+
                         <td>
                             <div class="btn-group" role="group">
                             </div>
