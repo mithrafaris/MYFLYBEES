@@ -144,7 +144,7 @@
 
   const data = []
 document.addEventListener('DOMContentLoaded', function() {
-
+console.log("addEventListener");
 document.querySelectorAll('.update').forEach(button => {
   button.addEventListener('click', function() {
     // Get the selected value
@@ -181,12 +181,14 @@ document.querySelectorAll('.update').forEach(button => {
       backgroundColor = 'blue'; // Change color to blue
       btnUpdate.innerHTML=response.status
       btnUpdate.style.backgroundColor='blue'
+    
       alert("processing")
 
     } else if (response.status === "delivered") {
       processingPercentage = 100; // Delivered status, set progress to 100%
       backgroundColor = 'green'; // Change color to green
       btnUpdate.innerHTML=response.status
+   
       alert("delivered")
 
     }

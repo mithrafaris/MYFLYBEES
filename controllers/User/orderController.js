@@ -88,6 +88,8 @@ module.exports.getOrders = async (req, res) => {
   }
 };
 
+
+
 module.exports.postVerifyPayment = async (req, res) => {
   const paymentResponse = req.body;
 
@@ -106,7 +108,10 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET_KEY,
 });
 
-module.exports.postCreateOrder = async (req, res) => {
+
+
+exports.postCreateOrder = async (req, res) => {
+ 
   const orderAmount = req.body.total * 100; // Amount in paise (1 INR = 100 paise)
   const options = {
     amount: orderAmount,
@@ -125,14 +130,16 @@ module.exports.postCreateOrder = async (req, res) => {
   });
 };
 
+
 exports.productCancel = async (req, res) => {
+  
   try {
     const orderId = req.body.orderId;
     const orderItemId = req.body.orderItemId;
     const cancelReason = req.body.cancelReason;
     const productId = req.body.productId;
     const quantity = req.body.quantity;
-    console.log(productId);
+    //console.log(productId);
     let product;
     if (cancelReason !== "damaged") {
       product = await Products.findOneAndUpdate(
@@ -151,12 +158,13 @@ exports.productCancel = async (req, res) => {
     );
 
     console.log("****************");
-    // console.log(updatedOrder);
+    console.log(updatedOrder);
     res.status(200).json({ success: true });
   } catch (err) {
     console.error("productCancel error ----> ", err.message);
   }
 };
+
 exports.getProductCancel=async(req,res)=>{
   try{
     console.log(req.query);
@@ -233,6 +241,7 @@ exports.getProductCancel=async(req,res)=>{
 }
 
 exports.getReturn = async(req,res)=>{
+  console.log("return vannu");
   try{
     const order = await Order.findOne({orderId:req.query.orderId})
     console.log(order);

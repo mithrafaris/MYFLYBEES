@@ -13,6 +13,7 @@ const adminMiddleware = require("../middleware/adminMiddleware")
 const couponController= require("../controllers/Admin/couponController")
 const orderController = require("../controllers/Admin/OrderControl")
 const walletController=require("../controllers/Admin/walletController")
+const salesController = require("../controllers/Admin/salesController")
 
 
 //dashboard
@@ -26,7 +27,7 @@ admin_route.get("/Adminlogin", viewcontroll.Adminlogin);
 
 // userdetails
 admin_route.get("/user_details", viewcontroll.user_details);
-admin_route.post("/user_details",adminMiddleware.is_Adminloggin,  viewcontroll.user_details);
+admin_route.post("/user_details",adminMiddleware.is_Adminloggin,viewcontroll.user_details);
 admin_route.get('/blockuser', adminblock.blockUser);
 
 
@@ -48,8 +49,6 @@ admin_route.get('/blockuser', adminblock.blockUser);
  //product
  admin_route.get( "/products",productControl.getProductList );
           
-
-          
 admin_route.get("/products/addProduct",productControl.getAddProduct);
           
  admin_route.post( "/products/addProduct",multer.upload.array("file"),productControl.postAddProduct );
@@ -59,7 +58,7 @@ admin_route.get("/products/addProduct",productControl.getAddProduct);
   admin_route.post("/products/edit", multer.upload.array("file"),productControl.postEditProduct);
  admin_route.get("/products/delete", productControl.getProductDelete);
           
-//admin_route.get("/product/deleteimage", productControl.deleteImages);
+admin_route.get("/product/deleteimage", productControl.deleteImages);
           
  admin_route.post("/products/search", productControl.getSearch);
           
@@ -90,8 +89,10 @@ admin_route.post('/filter-order',orderController.postFilterOrder)
 
 // wallet
 admin_route.get('/wallet',walletController.getWallet)
-
-
+//sales report
+// admin_route.get("/sales-report", salesController.getSalesReport);
+//  admin_route.post("/sales-report", salesController.postSalesReport);
+// admin_route.post("/generatepdf", salesController.postGeneratePdf);
 
 
 

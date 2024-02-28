@@ -141,7 +141,7 @@ exports.getHome = async (req, res) => {
             for (const item of user.cart) {
                 const userDetails = await userDB.findOne({ email: req.session.userId });
                 const product = await Products.findOne({ _id: item.productId });
-                if (product) {
+                if (product && product.stock > 0) { // Check if stock is greater than 0
                     let total = item.count * product.price;
                     cartData.push({ user: userDetails, count: item.count, product: product, total: total });
                 }
@@ -154,9 +154,9 @@ exports.getHome = async (req, res) => {
     
             const product = await Products.findOne({ _id: productId });
     
-            if (product) {
+            if (product && product.stock > 0) { // Check if stock is greater than 0 before updating
                 if (count > product.stock) {
-                    return res.status(400).json({ success: false });
+                    return res.status(400).json({ success: false, message: "Product stock is insufficient." });
                 } else {
                     await userDB.updateOne(
                         { email: req.session.userId, "cart.productId": productId },
@@ -184,14 +184,15 @@ exports.getHome = async (req, res) => {
                         });
                     }
                 }
-            } else if (req.session.userId === undefined) {
-                res.render('productDetail', { product, message: "Please Login" });
+            } else {
+                return res.status(400).json({ success: false, message: "Product is out of stock." });
             }
         } catch (err) {
             console.error("updateCart", err.message);
             return res.status(500).json({ success: false, error: "Internal Server Error" });
         }
     };
+    
     exports.getProfile= async(req,res)=>{
       try{
           const user =await userDB.findOne({email:req.session.userId})

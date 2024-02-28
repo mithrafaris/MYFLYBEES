@@ -4,6 +4,7 @@ const Products = require("../../model/productModel");
 const userDB = require("../../model/userdetails_model");
 
 const { Mongoose } = require("mongoose");
+const { loginUser } = require("../User/userlogincontol");
 
 module.exports.getOrderList = async (req, res) => {
   try {
@@ -119,14 +120,18 @@ module.exports.getOrderList = async (req, res) => {
 };
 
 exports.postOrderUpdate = async (req, res) => {
+  
   try {
-    //  console.log(req.body);
+    var updateStatus;
+    //console.log(req.body);
+    const orderid= req.body. orderId
     const pipeline = [
       { $match: { orderId: req.body.orderId } },
       { $unwind: "$orderItems" },
     ];
-
-    const order = await Order.aggregate(pipeline);
+    
+    //const order = await Order.aggregate(pipeline);
+    const order= await Order.findOne({ orderId: orderid})
     // const orderr= await Order.find({orderId: req.body.orderId })
     //     const orderr = await Order.find({orderId: req.body.orderId})
     // .populate('user')
@@ -134,6 +139,7 @@ exports.postOrderUpdate = async (req, res) => {
     //   path: 'orderItems.product_id',
     //   model: 'Products' // Replace 'Product' with the actual product model name
     // })
+  
     const orderr = await Order.aggregate([
       {
         $match: {
@@ -178,40 +184,50 @@ exports.postOrderUpdate = async (req, res) => {
     const productId = req.body.productId;
 
     if (orderr.length > 0) {
-      const order = orderr[0];
+      // const order = orderr[0];
+//console.log("its comming");
+//console.log(order.orderItems);
 
       // Update the status of each item in the order
       const updatedOrderItems = order.orderItems.map((item) => {
-        let updateStatus;
+        // var updateStatus;
         const objectId = item.product_id._id;
         const objectIdString = objectId.toString();
         const numericPortion = objectIdString.match(/[0-9a-f]+/i)[0];
-
-        console.log(item.orderStatus, "@@@@@");
         if (numericPortion === productId) {
+    
           switch (item.orderStatus) {
+            
             case "pending":
               updateStatus = "processing";
+              item.orderStatus="processing"
+             
               break;
             case "processing":
               updateStatus = "delivered";
+              item.orderStatus="delivered";
               break;
             // Add more cases as needed
 
             default:
-              // Handle other cases if necessary
+             item.orderStatus=item.orderStatus
               break;
           }
+          // console.log(updateStatus,"123456789");
         } else {
-          // If numericPortion does not match productId, keep the existing status
-          updateStatus = item.orderStatus;
-        }
+       
 
-        // Return a new object with the updated orderStatus
-        return { ...item, orderStatus: updateStatus };
+          updateStatus = item.orderStatus;
+        
+        }
+       
+
+        return { ...item,orderStatus: updateStatus };
       });
-      console.log("######33", updatedOrderItems);
+
+     
       // Update the entire order's orderItems array with the updated values
+
       const updatedOrder = await Order.findOneAndUpdate(
         { orderId: req.body.orderId },
         { $set: { orderItems: updatedOrderItems } },
@@ -219,17 +235,19 @@ exports.postOrderUpdate = async (req, res) => {
       );
 
       // Handle updatedOrder as needed (it contains the updated order)
-      console.log("Updated Order:", updatedOrder);
       res.send({ status: updateStatus });
     } else {
       // Handle the case when no orders are found with the given orderId
       console.log("Order not found.");
       res.send({ status: currentStatus });
     }
+   
   } catch (err) {
     console.error("postOrderUpdate", err.message);
   }
 };
+
+
 exports.getOrderUpdate=async(req,res)=>{
   try{
       console.log(req.body);
@@ -311,29 +329,25 @@ exports.postCancelOrder = async (req, res) => {
     const order = await Order.findOne({ orderId });
 
     if (!order) {
-      return res.send({ message: "Order not found" });
+      return res.status(404).send({ message: "Order not found" });
     }
 
     if (!cancelableStatuses.includes(order.orderStatus)) {
-      return res.send({
-        status: "delivered",
-        message: "Cannot cancel order with current status",
-      });
+      return res.status(400).send({ message: "Cannot cancel order with current status" });
     }
 
     const updatedOrder = await Order.findOneAndUpdate(
       { orderId },
-      { $set: { orderStatus: "cancel" } },
+      { $set: { orderStatus: "cancelled" } }, // Update the status to "cancelled"
       { new: true } // This ensures that the updated order is returned
     );
 
-    res.send({ status: "cancel", message: "Order cancelled" });
+    res.status(200).send({ status: "cancelled", message: "Order cancelled successfully" });
   } catch (err) {
-    console.error(" ------>postCancelOrder<------", err.message);
-    res.status(500).send({ status: "Error occurred while canceling order" });
+    console.error("Error occurred while canceling order:", err.message);
+    res.status(500).send({ status: "error", message: "Error occurred while canceling order" });
   }
 };
-
 exports.postFilterOrder=async(req,res)=>{
   try{
     console.log(req.body);
@@ -469,7 +483,9 @@ console.log(orderList,"********************");
 // const orderList = await Order.aggregate(aggregationPipeline);
 // console.log(orderList,"********************");
 //   res.send({ data: orderList });
+console.log("end========");
   }catch(err){
     console.error("postFilterOrder =====> ",err.message);
   }
+  
 }

@@ -13,6 +13,12 @@ const productSchema = new mongoose.Schema({
     stock: {
         type: Number,
         required: true,
+        validate: {
+            validator: function(value) {
+                return value >= 0;
+            },
+            message: props => `${props.value} is not a valid stock value. Stock must be a non-negative number.`
+        }
     },
     description: {
         type: String,
@@ -20,9 +26,8 @@ const productSchema = new mongoose.Schema({
     },
     images: {
         type: Array,
-     
     },
-        category: {
+    category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
     },
