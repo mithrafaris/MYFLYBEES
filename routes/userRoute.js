@@ -37,10 +37,7 @@ user_route.post("/register", userauth.isLogin, usersigncontrol.post_signup);
 user_route.get("/product", productController.getProducts);
 
 //productdetail
-user_route.get(
-  "/product-detail",
-  errorHandle.errorHandler,
-  productDetailController.getProductDetail
+user_route.get("/product-detail",errorHandle.errorHandler,productDetailController.getProductDetail
 );
 user_route.post("/product-detail", productDetailController.postCartItem);
 

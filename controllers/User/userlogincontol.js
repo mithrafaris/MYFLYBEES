@@ -1,13 +1,14 @@
 const userDB = require("../../model/userdetails_model");
 const bcrypt = require("bcrypt");
-const nodemailer =require("nodemailer")
-const userUtils = require('../../utils/userUtils')
+const nodemailer = require("nodemailer");
+const userUtils = require('../../utils/userUtils');
+
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log("log in success");
 
-    const user = await userDB.findOne({email});
+    const user = await userDB.findOne({ email });
 
     if (!user) {
       console.log("User not found");
@@ -27,10 +28,11 @@ exports.loginUser = async (req, res) => {
       return res.render('user_login', { message: "Invalid email or password" });
     }
   } catch (e) {
-    console.log("postlogin",e.message);
+    console.log("postlogin", e.message);
     return res.render('user_login', { message: "An error occurred during login" });
   }
 };
+
 exports.getForgot = async (req, res) => {
   res.render('forgot');
 }
@@ -40,25 +42,19 @@ exports.postForgot = async (req, res) => {
   const resetToken = userUtils.generateToken();
   userUtils.saveResetTokenToDatabase(userEmail, resetToken);
 
-
   const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
+    service: 'gmail',
     auth: {
-      user: 'mithrafaris31@gmail.com',
-      pass: '121kc24027' 
+      user: 'mithrafaris31@gmail.com', // Enter your Gmail address here
+      pass: '121kc24027' // Enter your Gmail password here
     }
   });
-  
-
-  
 
   const mailOptions = {
-    from: 'mithrafaris31@gmail.com',
+    from: 'your_email@gmail.com',
     to: userEmail,
     subject: 'Password Reset',
-    text: `Click the following link to reset your password: http://localhost:3002/resetPassword?token=${resetToken}`
+    text: `Click the following link to reset your password: http://localhost:3000/resetPassword?token=${resetToken}`
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

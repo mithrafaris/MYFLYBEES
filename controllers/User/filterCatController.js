@@ -9,7 +9,7 @@ exports.getFilterCat = async (req, res) => {
         if (req.query.id !== "") {
             const id = new ObjectId(req.query.id);
             console.log(id);
-            console.log("------------------------------------------");
+    
             const user = await userDB.findOne({ email: req.session.userId });
             const categories = await Category.find({ isList: true });
 
@@ -19,7 +19,12 @@ exports.getFilterCat = async (req, res) => {
 
             res.render('home', { user: user, products: productsWithCategory, category: categories, banner });
         } else {
-            // Handle the case where req.query.id is empty
+            // Render the home page without filtering by category
+            const user = await userDB.findOne({ email: req.session.userId });
+            const categories = await Category.find({ isList: true });
+            const banner = await Banner.find({ isList: true });
+            const allProducts = await Products.find({ isList: true }).populate('category');
+            res.render('home', { user: user, products: allProducts, category: categories, banner });
         }
     } catch (err) {
         console.error("getFilterCat ---->", err.message);

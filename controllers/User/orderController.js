@@ -232,7 +232,6 @@ exports.getProductCancel=async(req,res)=>{
     ];
     const user = await userDB.findOne({email:req.session.userId})
   const orderLists = await Order.aggregate(pipeline);
-  console.log("%%%%%%%%%%%%5555");
   console.log(orderLists);
     res.render('orderCancel',{orderLists,user})
   }catch(err){
@@ -240,76 +239,75 @@ exports.getProductCancel=async(req,res)=>{
   }
 }
 
-exports.getReturn = async(req,res)=>{
-  console.log("return vannu");
-  try{
-    const order = await Order.findOne({orderId:req.query.orderId})
-    console.log(order);
-    console.log(req.query);
-    const orderId=req.query.orderId
-    const pipeline = [
-      {$match:{
-            orderId
-          }},
-      {
-      
-        $lookup: {
-          from: 'user_details', // Replace with your actual collection name for users
-          localField: 'user',
-          foreignField: '_id',
-          as: 'user'
-        }
-      },
-      {
-        $unwind: '$user'
-      },
-      {
-        $unwind: '$orderItems'
-      },
-      
-      {
-        $lookup: {
-          from: 'products', // Replace with the actual collection name for products
-          localField: 'orderItems.product_id',
-          foreignField: '_id',
-          as: 'orderItems.product'
-        }
-      },
-      {
-        $group: {
-          _id: '$orderId', // Group by orderId to eliminate duplicates
-          user: { $first: '$user' },
-          orderId: { $first: '$orderId' },
-          orderItems: { $push: '$orderItems' }, // Keep the original orderItems array
-          totalAmount: { $first: '$totalAmount' },
-          purchaseDate: { $first: '$purchaseDate' },
-          deliveryDate: { $first: '$deliveryDate' },
-          paymentMethod: { $first: '$paymentMethod' },
-          address:{$first: '$address' }
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          user: 1,
-          orderId: 1,
-          orderItems: 1,
-          totalAmount: 1,
-          purchaseDate: 1,
-          deliveryDate: 1,
-          paymentMethod: 1,
-          address:1,
-        }
+
+exports.getReturn = async (req, res) => {
+  console.log("Return request received");
+  try {
+      const orderId = req.query.orderId;
+      const order = await Order.findOne({ orderId });
+      console.log(order);
+      console.log(req.query);
+
+      if (!order) {
+          return res.status(404).send("Order not found");
       }
-    ];
-       
-  const orderLists = await Order.aggregate(pipeline);
-  console.log("******",orderLists[0].orderItems);
-  const orderItems=orderLists[0].orderItems
-  const user = await userDB.findOne({email:req.session.userId})
-  res.render('return',{orderItems,user})
-  }catch(err){
-    console.error("getReturn error ----->",err.message);
+
+      const pipeline = [
+          { $match: { orderId } },
+          {
+              $lookup: {
+                  from: 'user_details', // Replace with your actual collection name for users
+                  localField: 'user',
+                  foreignField: '_id',
+                  as: 'user'
+              }
+          },
+          { $unwind: '$user' },
+          { $unwind: '$orderItems' },
+          {
+              $lookup: {
+                  from: 'products', // Replace with the actual collection name for products
+                  localField: 'orderItems.product_id',
+                  foreignField: '_id',
+                  as: 'orderItems.product'
+              }
+          },
+          {
+              $group: {
+                  _id: '$orderId', // Group by orderId to eliminate duplicates
+                  user: { $first: '$user' },
+                  orderId: { $first: '$orderId' },
+                  orderItems: { $push: '$orderItems' }, // Keep the original orderItems array
+                  totalAmount: { $first: '$totalAmount' },
+                  purchaseDate: { $first: '$purchaseDate' },
+                  deliveryDate: { $first: '$deliveryDate' },
+                  paymentMethod: { $first: '$paymentMethod' },
+                  address: { $first: '$address' }
+              }
+          },
+          {
+              $project: {
+                  _id: 0,
+                  user: 1,
+                  orderId: 1,
+                  orderItems: 1,
+                  totalAmount: 1,
+                  purchaseDate: 1,
+                  deliveryDate: 1,
+                  paymentMethod: 1,
+                  address: 1,
+              }
+          }
+      ];
+
+      const orderLists = await Order.aggregate(pipeline);
+      console.log("******", orderLists[0].orderItems);
+      const orderItems = orderLists[0].orderItems;
+      const user = await userDB.findOne({ email: req.session.userId });
+
+      res.render('return', { orderItems, user });
+  } catch (err) {
+      console.error("getReturn error ----->", err.message);
+      res.status(500).send("Internal Server Error");
   }
 }
-

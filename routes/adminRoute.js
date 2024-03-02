@@ -17,8 +17,9 @@ const salesController = require("../controllers/Admin/salesController")
 
 
 //dashboard
-admin_route.get("/dashboard", viewcontroll.dashboard);
-admin_route.post("/dashboard",adminMiddleware.is_Adminloggin, viewcontroll.dashboard);
+admin_route.get( "/dashboard",adminlogincontrol.getAdminDashboard);
+admin_route.post('/graphData',adminlogincontrol.postGraph)
+
 //adminlogin
 admin_route.post("/Adminlogin",adminMiddleware.is_Adminloggin, adminlogincontrol.Adminlogin);
 admin_route.get("/Adminlogin", viewcontroll.Adminlogin);
@@ -90,9 +91,9 @@ admin_route.post('/filter-order',orderController.postFilterOrder)
 // wallet
 admin_route.get('/wallet',walletController.getWallet)
 //sales report
-// admin_route.get("/sales-report", salesController.getSalesReport);
-//  admin_route.post("/sales-report", salesController.postSalesReport);
-// admin_route.post("/generatepdf", salesController.postGeneratePdf);
+admin_route.get("/sales-report", salesController.getSalesReport);
+ admin_route.post("/sales-report", salesController.postSalesReport);
+//admin_route.post("/generatepdf", salesController.postGenerateExcel);
 
 
 

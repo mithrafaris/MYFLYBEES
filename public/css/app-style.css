@@ -57,7 +57,7 @@ body {
    	background-color: #000;
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
-    color: rgba(1, 1, 1, 0.85);
+    color: whitesmoke;
     letter-spacing: 0.5px;
 }
 [tabindex="-1"]:focus {
@@ -87,7 +87,7 @@ select option {
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
-	  color: #010101;
+	  color:white;
 }
 .h1, h1 {
 	font-size: 48px;
@@ -520,7 +520,7 @@ body.bg-theme1 {
 }
 
 .logo-text{
-	color: #080707;
+	color:white;
 	font-size: 15px;
 	display: inline-block;
 	text-transform: uppercase;
@@ -552,7 +552,7 @@ body.bg-theme1 {
 
 .user-details .media .media-body .user-subtitle {
   font-size: 13px;
-  color: #040404;
+  color:white;
   margin-bottom: 0;
   
 }
@@ -652,7 +652,7 @@ body.bg-theme1 {
 	margin-bottom: .75rem;
 	font-weight: 600;
 	font-size: 16px;
-	color:#131111;
+	color:white;
 }
 
 .card-action{
@@ -912,9 +912,9 @@ body.bg-theme1 {
 }
 
 .btn-danger {
-	color:  #000000;
-	background-color: #f43643;
-	border-color: #f43643
+	color: white;
+	background-color:transparent;
+	border-color:whitesmoke;
 }
 .btn-danger:hover {
 	color:  #000000;
@@ -1718,7 +1718,7 @@ table.grid td {
 .table {
     width: 100%;
     margin-bottom: 1rem;
-    color: rgba(5, 5, 5, 0.85);
+    color:white;
 }
 .table.align-items-center td, .table.align-items-center th {
     vertical-align: middle;
