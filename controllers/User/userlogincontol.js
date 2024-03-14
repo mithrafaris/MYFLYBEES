@@ -38,74 +38,96 @@ exports.getForgot = async (req, res) => {
 }
 
 exports.postForgot = async (req, res) => {
-  const userEmail = req.body.email;
-  const resetToken = userUtils.generateToken();
-  userUtils.saveResetTokenToDatabase(userEmail, resetToken);
+  try {
+    const userEmail = req.body.email;
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'mithrafaris31@gmail.com', // Enter your Gmail address here
-      pass: '121kc24027' // Enter your Gmail password here
+    // Check if email is provided
+    if (!userEmail) {
+      return res.status(400).render('forgot', { message: 'Email is required' });
     }
-  });
 
-  const mailOptions = {
-    from: 'your_email@gmail.com',
-    to: userEmail,
-    subject: 'Password Reset',
-    text: `Click the following link to reset your password: http://localhost:3000/resetPassword?token=${resetToken}`
-  };
+    // Generate reset token
+    const resetToken = userUtils.generateToken();
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error(error.message);
-      res.render('forgot', { message: 'Error sending password reset email' });
-    } else {
-      console.log('Email sent: ' + info.response);
-      res.render('forgot', { emailLink: true });
-    }
-  });
-}
+    // Save reset token to user's record in the database
+    await userDB.findOneAndUpdate(
+      { email: userEmail },
+      { $set: { resetToken: resetToken } }
+    );
 
-exports.getResetPassword = async (req, res) => {
-  const resetToken = req.query.token;
+    // Create Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'mithrafaris31@gmail.com', // Enter your Gmail address here
+        pass: 'jauc ukdv divv udgq' // Enter your Gmail password here
+      }
+    });
 
-  if (resetToken) {
-    const user = await userDB.findOne({ resetToken: resetToken });
+    // Construct email message
+    const mailOptions = {
+      from: 'mithrafaris31@gmail.com',
+      to: userEmail, // Set recipient's email address
+      subject: 'Password Reset',
+      text: `Click the following link to reset your password: http://localhost:3000/resetPassword?token=${resetToken}`
+    };
 
-    if (user) {
-      res.render('resetPass');
-    } else {
-      res.render('forgot', { message: 'Invalid or expired reset token. Try again!' });
-    }
-  } else {
-    res.render('forgot', { message: 'Invalid or expired reset token. Try again!' });
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    console.log('Password reset email sent successfully');
+    res.render('forgot', { emailLink: true });
+
+  } catch (error) {
+    console.error('Error sending password reset email:', error.message);
+    res.status(500).render('forgot', { message: 'Error sending password reset email' });
   }
 }
 
+
 exports.postResetPassword = async (req, res) => {
+  console.log("helloooooooooo");
   const resetToken = req.query.token;
   const newPassword = req.body.newPassword;
   const confirmPassword = req.body.confirmPassword;
+  console.log(req.query.token);
+  console.log(req.body.newPassword);
+  console.log(req.body.confirmPassword);
 
+  // verify the token against the stored tokens
   if (resetToken) {
-    const user = await userDB.findOneAndUpdate(
-      { resetToken: resetToken },
-      { $set: { password: newPassword, resetToken: undefined } },
-      { new: true }
-    );
+    try {
+      const user = await userDB.findOneAndUpdate({ resetToken: resetToken });
 
-    if (user) {
-      if (newPassword === confirmPassword) {
-        res.render('user_login', { passwordMessage: 'Password reset successfully' });
+      if (user) {
+        // validate the new password and confirm password
+        if (newPassword === confirmPassword) {
+          // Hash the new password
+          const hashedPassword = await bcrypt.hash(newPassword, 10);
+          // update the user's password in the database with the hashed password
+          user.password = hashedPassword;
+          console.log( hashedPassword );
+          user.resetToken = undefined;
+          console.log( user.resetToken );
+        
+          await user.save(); // Saving the changes to the user object
+
+          // redirect to login page and display success message
+          return res.render('user_login', { passwordMessage: "Password reset successfully" });
+        } else {
+          // handle password mismatch error
+          return res.render('resetPass', { message: "New password and confirm password do not match" });
+        }
       } else {
-        res.render('resetPass', { message: 'New password and confirm password do not match' });
+        // Handle invalid or expired reset token
+        return res.render('resetPass', { message: "Invalid or expired reset token" });
       }
-    } else {
-      res.render('resetPass', { message: 'Invalid reset token' });
+    } catch (error) {
+      console.error(error);
+      return res.render('resetPass', { message: "An error occurred while resetting password" });
     }
   } else {
-    res.render('resetPass', { message: 'Invalid reset token' });
+    // Handle missing token
+    return res.render('resetPass', { message: "Invalid reset token" });
   }
-}
+};

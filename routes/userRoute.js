@@ -27,7 +27,7 @@ user_route.get("/profile", userhomecontrol.getProfile);
 //forgot password
 user_route.get("/forgot", userlogincontrol.getForgot);
 user_route.post("/forgot", userlogincontrol.postForgot);
-user_route.get("/resetPassword", userlogincontrol.getResetPassword);
+user_route.get("/resetPassword", userlogincontrol.postForgot);
 
 user_route.post("/resetPassword", userlogincontrol.postResetPassword);
 

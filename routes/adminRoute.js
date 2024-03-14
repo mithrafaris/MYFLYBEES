@@ -93,8 +93,7 @@ admin_route.get('/wallet',walletController.getWallet)
 //sales report
 admin_route.get("/sales-report", salesController.getSalesReport);
  admin_route.post("/sales-report", salesController.postSalesReport);
-//admin_route.post("/generatepdf", salesController.postGenerateExcel);
-
+//admin_route.post("/generatepdf", salesController.postReport
 
 
 
